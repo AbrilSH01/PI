@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
-
+from Pedidos import *
 ventana = Tk()
 ventana.title("Cobro")
 ventana.geometry("600x400")
