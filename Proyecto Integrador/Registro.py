@@ -74,6 +74,7 @@ Fecha = ttk.Entry(pestaña2,width= 30)
 CVV = ttk.Entry(pestaña2,width= 30,show="*")
 Continuar=Button(pestaña2,text="Continuar",bg="#255748",command=ejecutaInsert2)
 def tarjeta():  
+    global MET
     if Metodo.get()=="Tarjeta":
         Num = Label(pestaña2, text="Numero de la tarjeta:")
         Num.place(x=50,y=80)
@@ -85,9 +86,12 @@ def tarjeta():
         cvv.place(x=50,y=140)
         CVV.place(x=200,y=140)
         Continuar.place(x=300,y=200)
-    else:
+        MET= "Tarjeta"
+    
+    elif Metodo.get()=="Efectivo":
         Cont2=Button(pestaña2,text="Continuar",bg="#255748",command=ejecutaInsert2)
         Cont2
+        MET = "Efectivo"
 Enviar=Button(pestaña2,text="Registrar",bg="#255748",command=tarjeta)
 Enviar.place(x=210,y=200)
 
@@ -162,10 +166,7 @@ Pay=Button(pestaña3,text="Pay",bg="#255748",command=ck)
 Pay.place(x=130,y=150)
 
 
-if Metodo.get()=="Tarjeta":
-    MET= "Tarjeta"
-else:
-    MET = "Efectivo"
+
 pagar = Button(pestaña3,text="Pagar",bg="#255748",command=ejecutaInsert3)
 pagar.place(x=220,y=180)
 panel.add(pestaña1,text="Formulario usuarios")
