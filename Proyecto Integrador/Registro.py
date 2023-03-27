@@ -1,11 +1,17 @@
 from tkinter import *
 from tkinter import ttk
-from Registro_clase import *
+from tkinter import messagebox
 
 
 ventana = Tk()
 ventana.title("Registro")
 ventana.geometry("600x400")
+
+def registro():
+        if Nombre.get()==vacio or Apellidos.get()==vacio or Correo.get()==vacio or Telefono.get()==vacio or Contraseña.get()==vacio:
+            messagebox.showerror("Error","Se deben llenar todos los datos")
+        else:
+            messagebox.showinfo("Correcto","Sus datos se han registrado correctamente")
 
 seccion1=Frame(ventana,bg="green")
 seccion1.pack(expand=True,fill='both')
@@ -41,13 +47,11 @@ Telefono.place(x=200,y=140)
 Passw = Label(ventana, text="Ingrese su Contraseña: ", bg="green")
 Passw.place(x=50,y=170)
 
-Contraseña = ttk.Entry(width=30)
+Contraseña = ttk.Entry(width=30,show="*")
 Contraseña.place(x=200,y=170)
 vacio=""
 
-registrar = Registrar(Nombre,Apellidos,Correo,Telefono,Contraseña,vacio)
-
-BotonRegistrar = Button(seccion1,text="Registrar",bg="#255748",fg="white",command=registrar.registro)
+BotonRegistrar = Button(seccion1,text="Registrar",bg="#255748",fg="white",command=registro)
 BotonRegistrar.pack()
 
 ventana.mainloop()
