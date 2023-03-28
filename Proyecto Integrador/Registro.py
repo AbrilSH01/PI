@@ -140,9 +140,6 @@ def c120():
     Total = Total + 120
 
 
-
-        
-
 Mnu = Label(pestaña3,text="Menu",fg="blue",font=("Modern",18)).pack()
 Late=Button(pestaña3,text="Late",bg="#255748",command=late)
 Late.place(x=50,y=50)
