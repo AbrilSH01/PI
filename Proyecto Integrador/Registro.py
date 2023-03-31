@@ -92,6 +92,8 @@ def tarjeta():
         Cont2=Button(pestaña2,text="Continuar",bg="#255748",command=ejecutaInsert2)
         Cont2
         MET = "Efectivo"
+    elif Metodo.get()=="":
+        messagebox.showerror("Error","eleccione un metodo de pago")
 Enviar=Button(pestaña2,text="Registrar",bg="#255748",command=tarjeta)
 Enviar.place(x=210,y=200)
 

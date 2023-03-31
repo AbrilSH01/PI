@@ -50,4 +50,4 @@ class Registro_clase:
             cursor.execute(sqlInsert,datos)
             conx.commit()
             conx.close
-            messagebox.showinfo("Correcto","Se pagó un total de" + str(Total))
+            messagebox.showinfo("Correcto","Se pagó un total de " + str(Total))
