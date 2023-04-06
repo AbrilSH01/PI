@@ -13,10 +13,37 @@ def ejecutaInsert2():
     
 def ejecutaInsert3():
     controlador.Pago(MET,Total)
+
+def ejecutaSelect():
+    rsUsu= controlador.consultarUsuario(varBus.get())
+    for usu in rsUsu:
+        cadena= str(usu[0])+" "+usu[1]+" "+usu[2]+" "+str(usu[3])+" "+str(usu[4])+" "+(usu[5])
+    if(rsUsu): 
+        textBus.config(state='normal')  # Configuración del estado del widget Text
+        textBus.delete(1.0, 'end')  # Limpia el contenido del widget Text
+        textBus.insert('end', cadena)  # Inserta la cadena en el widget Text
+        textBus.config(state='disabled')  # Restaura el estado del widget Text a 'disabled'
+    else:
+        messagebox.showerror("Error","El usuario no existe en la base de datos")
+        
+def ejecutaconsulta():
+    # Obtiene los usuarios de la base de datos
+    rUsu= controlador.consulta()
+    # Borra los datos existentes en la tabla
+    tabla.delete(*tabla.get_children())
+    # Inserta los nuevos datos en la tabla
+    for usu in rUsu:
+        tabla.insert('', 'end', text=usu[0], values=(usu[1], usu[2], usu[3], usu[4], usu[5]))
+        
+def ejecutaACT(varNomAE, varAPAE, varCorrAE, varTelAE, varPassAE):
+    controlador.actualizar(varAct.get(),varNomAE.get(), varAPAE.get(), varCorrAE.get(), varTelAE.get(), varPassAE.get())
     
+def ejecutadelete():
+    controlador.eliminar(varElim.get())        
+
 ventana = Tk()
 ventana.title("Reinvent Cafe")
-ventana.geometry("500x300")
+ventana.geometry("800x400")
 
 panel = ttk.Notebook(ventana)
 panel.pack(fill='both',expand='yes')
@@ -24,6 +51,10 @@ panel.pack(fill='both',expand='yes')
 pestaña1 = ttk.Frame(panel)
 pestaña2 = ttk.Frame(panel)
 pestaña3 = ttk.Frame(panel)
+pestaña4 = ttk.Frame(panel)
+pestaña5 = ttk.Frame(panel)
+pestaña6 = ttk.Frame(panel)
+pestaña7 = ttk.Frame(panel)
 
 #Registro de usuario
 titulo = Label(pestaña1,text="Registro de usuarios",fg="blue",font=("Modern",18)).pack()
@@ -164,11 +195,108 @@ Cheesecake.place(x=50,y=150)
 Pay=Button(pestaña3,text="Pay",bg="#255748",command=ck)
 Pay.place(x=130,y=150)
 
-
-
 pagar = Button(pestaña3,text="Pagar",bg="#255748",command=ejecutaInsert3)
 pagar.place(x=220,y=180)
+
+#Buscar usuario
+tituloo = Label(pestaña4,text="Buscar usuario:",fg ="green",font=("Modern",18)).pack()
+
+varBus=tk.StringVar()
+lblid= Label(pestaña4,text="Identificador de usuario:")
+txtid= Entry(pestaña4,textvariable=varBus).pack()
+btnBusqueda= Button(pestaña4,text="Buscar",command=ejecutaSelect).pack()
+
+subBus= Label(pestaña4,text= "Registrado:",fg="blue",font=("Modern",15)).pack()
+textBus = tk.Text(pestaña4, height=5, width=70)
+textBus.pack() 
+
+#Consultar usuarios
+subUS= Label(pestaña5,text= "Usuarios:",fg="green",font=("Modern",15)).pack()
+tabla = ttk.Treeview(pestaña5)
+tabla['columns'] = ('nombre','apellidos', 'correo','telefono', 'contraseña')
+tabla.column('#0', width=50, minwidth=50)
+tabla.column('nombre', width=120, minwidth=120)
+tabla.column('apellidos', width=120, minwidth=120)
+tabla.column('correo', width=150, minwidth=150)
+tabla.column('telefono', width=150, minwidth=150)
+tabla.column('contraseña', width=100, minwidth=100)
+tabla.heading('#0', text='ID', anchor=tk.CENTER)
+tabla.heading('nombre', text='Nombre', anchor=tk.CENTER)
+tabla.heading('apellidos', text='Apellidos', anchor=tk.CENTER)
+tabla.heading('correo', text='Correo', anchor=tk.CENTER)
+tabla.heading('telefono', text='Telefono', anchor=tk.CENTER)
+tabla.heading('contraseña', text='Contraseña', anchor=tk.CENTER)
+tabla.pack() 
+
+Consultar= Button(pestaña5,text="Consultar",command=ejecutaconsulta).pack()
+
+#Actualizar
+     
+titulo3 = Label(pestaña6,text="Actualizar Usuario:",fg ="green",font=("Modern",18))
+titulo3.pack()
+
+varAct = tk.StringVar()
+lblidA = Label(pestaña6,text="Identificador de usuario:")
+lblidA.pack()
+txtidA = Entry(pestaña6,textvariable=varAct)
+txtidA.pack()
+
+varNomAE = tk.StringVar()
+lblNomAE = Label(pestaña6,text="Nuevo nombre: ")
+lblNomAE.pack()
+txtNomAE = Entry(pestaña6,textvariable=varNomAE)
+txtNomAE.pack()
+
+varAPAE = tk.StringVar()
+lblAPAE = Label(pestaña6,text="Nuevos apellidos: ")
+lblAPAE.pack()
+txtAPAE = Entry(pestaña6,textvariable=varAPAE)
+txtAPAE.pack()
+
+varCorrAE = tk.StringVar()
+lblCorrAE = Label(pestaña6,text="Nuevo correo: ")
+lblCorrAE.pack()
+txtCorrAE = Entry(pestaña6,textvariable=varCorrAE)
+txtCorrAE.pack()
+
+varTelAE = tk.StringVar()
+lblTelAE = Label(pestaña6,text="Nuevo telefono: ")
+lblTelAE.pack()
+txtTelAE = Entry(pestaña6,textvariable=varTelAE)
+txtTelAE.pack()
+
+varPassAE = tk.StringVar()
+lblPassAE = Label(pestaña6,text="Nueva contraseña: ")
+lblPassAE.pack()
+txtPassAE = Entry(pestaña6,textvariable=varPassAE)
+txtPassAE.pack()
+
+btnACT = Button(pestaña6,text="Actualizar usuario", command=lambda: ejecutaACT(varNomAE, varAPAE, varCorrAE, varTelAE, varPassAE))
+btnACT.pack()
+
+#Eliminar usuario
+titulo3 = Label(pestaña7,text="Eliminar Usuario:",fg ="red",font=("Modern",18))
+titulo3.pack()
+
+varElim = tk.StringVar()
+lblidE = Label(pestaña7,text="Identificador de usuario:")
+lblidE.pack()
+txtidE = Entry(pestaña7,textvariable=varElim)
+txtidE.pack()
+
+btnElimina = Button(pestaña7,text="Eliminar usuario", command=ejecutadelete)
+btnElimina.pack()
+
+mensajeAE = tk.StringVar()
+lblMensajeAE = Label(pestaña7, textvariable=mensajeAE)
+lblMensajeAE.pack()
+
+
 panel.add(pestaña1,text="Formulario usuarios")
 panel.add(pestaña2,text="Metodo de pago")
 panel.add(pestaña3,text="Menú")
+panel.add(pestaña4,text="Buscar")
+panel.add(pestaña5,text="Consultar")
+panel.add(pestaña6,text="Actualizar")
+panel.add(pestaña7,text="Eliminar")
 ventana.mainloop()
