@@ -268,7 +268,7 @@ txtTelAE.pack()
 varPassAE = tk.StringVar()
 lblPassAE = Label(pestaña6,text="Nueva contraseña: ")
 lblPassAE.pack()
-txtPassAE = Entry(pestaña6,textvariable=varPassAE)
+txtPassAE = Entry(pestaña6,textvariable=varPassAE,show="*")
 txtPassAE.pack()
 
 btnACT = Button(pestaña6,text="Actualizar usuario", command=lambda: ejecutaACT(varNomAE, varAPAE, varCorrAE, varTelAE, varPassAE))
