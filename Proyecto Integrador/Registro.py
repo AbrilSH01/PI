@@ -13,6 +13,7 @@ def ejecutaInsert2():
     
 def ejecutaInsert3():
     controlador.Pago(MET,Total)
+    controlador.pedido(Pedido,Total)
 
 def ejecutaSelect():
     rsUsu= controlador.consultarUsuario(varBus.get())
@@ -40,7 +41,27 @@ def ejecutaACT(varNomAE, varAPAE, varCorrAE, varTelAE, varPassAE):
     
 def ejecutadelete():
     controlador.eliminar(varElim.get())        
+    
+def ejecutaSelectP():
+    rsUsu= controlador.con_compra(varBus.get())
+    for usu in rsUsu:
+        cadena= str(usu[0])+" "+usu[1]+" "+str(usu[2])
+    if(rsUsu): 
+        textBus.config(state='normal')  # Configuración del estado del widget Text
+        textBus.delete(1.0, 'end')  # Limpia el contenido del widget Text
+        textBus.insert('end', cadena)  # Inserta la cadena en el widget Text
+        textBus.config(state='disabled')  # Restaura el estado del widget Text a 'disabled'
+    else:
+        messagebox.showerror("Error","El Pedido no existe en la base de datos")
 
+def ejecutaconsultaP():
+    # Obtiene los usuarios de la base de datos
+    rUsu= controlador.consultaP()
+    # Borra los datos existentes en la tabla
+    tabla.delete(*tabla.get_children())
+    # Inserta los nuevos datos en la tabla
+    for usu in rUsu:
+        tabla.insert('', 'end', text=usu[0], values=(usu[1], usu[2]))
 ventana = Tk()
 ventana.title("Reinvent Cafe")
 ventana.geometry("800x400")
@@ -53,6 +74,8 @@ pestaña2 = ttk.Frame(panel)
 pestaña3 = ttk.Frame(panel)
 pestaña4 = ttk.Frame(panel)
 pestaña5 = ttk.Frame(panel)
+pestaña8 = ttk.Frame(panel)
+pestaña9 = ttk.Frame(panel)
 pestaña6 = ttk.Frame(panel)
 pestaña7 = ttk.Frame(panel)
 
@@ -130,47 +153,68 @@ Enviar.place(x=210,y=200)
 
 #Menú
 
-Total=0
+Total = 0
+Pedido = ""
 def late():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado un Late +$25')
     Total = Total + 25
+    Pedido = Pedido  + "Late" + ", "
 def pay():
+    global Pedido
     global Total
     messagebox.showinfo('Pedido','Se ha agregado un Pay + $25')
     Total = Total + 25
+    Pedido = Pedido  + "Pay" + ", "
 def ck():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado Cheesecake +$25')
     Total = Total + 25
+    Pedido = Pedido  + "Cheesecake" + ", "
 def mt():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado Matcha +$30')
     Total = Total + 30
+    Pedido = Pedido + "Matcha" + ", "
 def xp():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado Espresso +$30')
     Total = Total + 30
+    Pedido = Pedido  + "Espresso" + ", "
 def HD():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado Hot dog +$30')
     Total = Total + 30
+    Pedido = Pedido  + "Hot Dog" + ", "
 def F():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado Frappe +$50')
     Total = Total + 50  
+    Pedido = Pedido  + "Frappe" + ", "
 def H():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado Hamburguesa +$50')
     Total = Total + 50 
+    Pedido = Pedido  + "Hamburguesa" + ", "
 def chanwis():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado Sandwich +$50')
     Total = Total + 50 
+    Pedido = Pedido + "Sandwich" + ", "
 def c120():
     global Total
+    global Pedido
     messagebox.showinfo('Pedido','Se ha agregado Pizza +$120')
     Total = Total + 120
+    Pedido = Pedido + "Pizza" + ", "
 
 
 Mnu = Label(pestaña3,text="Menu",fg="blue",font=("Modern",18)).pack()
@@ -291,12 +335,40 @@ mensajeAE = tk.StringVar()
 lblMensajeAE = Label(pestaña7, textvariable=mensajeAE)
 lblMensajeAE.pack()
 
+#Buscar pedido
+tituloo = Label(pestaña8,text="Buscar Pedido:",fg ="green",font=("Modern",18)).pack()
+
+varBus=tk.StringVar()
+lblid= Label(pestaña8,text="Identificador de pedido:")
+txtid= Entry(pestaña8,textvariable=varBus).pack()
+btnBusqueda= Button(pestaña8,text="Buscar",command=ejecutaSelectP).pack()
+
+subBus= Label(pestaña8,text= "Registrado:",fg="blue",font=("Modern",15)).pack()
+textBus = tk.Text(pestaña8, height=5, width=70)
+textBus.pack() 
+
+#Consultar pedidos
+subUS= Label(pestaña9,text= "Ventas:",fg="green",font=("Modern",15)).pack()
+tabla = ttk.Treeview(pestaña9)
+tabla['columns'] = ('productos','total')
+tabla.column('#0', width=50, minwidth=50)
+tabla.column('productos', width=200, minwidth=120)
+tabla.column('total', width=120, minwidth=120)
+tabla.heading('#0', text='ID', anchor=tk.CENTER)
+tabla.heading('productos', text='Productos', anchor=tk.CENTER)
+tabla.heading('total', text='Total', anchor=tk.CENTER)
+
+tabla.pack() 
+
+Consultar= Button(pestaña9,text="Consultar",command=ejecutaconsultaP).pack()
 
 panel.add(pestaña1,text="Formulario usuarios")
 panel.add(pestaña2,text="Metodo de pago")
 panel.add(pestaña3,text="Menú")
 panel.add(pestaña4,text="Buscar")
 panel.add(pestaña5,text="Consultar")
+panel.add(pestaña8,text="Pedidos")
+panel.add(pestaña9,text="Consultar_Pedidos")
 panel.add(pestaña6,text="Actualizar")
 panel.add(pestaña7,text="Eliminar")
 ventana.mainloop()

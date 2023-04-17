@@ -101,12 +101,16 @@ class Registro_clase:
             else:
                 try:
                     cursor = conx.cursor()
-                    datos = (nom, ap, corr, tel, con, id)
-                    sqlUpdate = "UPDATE Usuarios SET Nombre=?, Apellidos=?, Correo=?, Telefono=?, Contraseña=? WHERE id=?"
-                    cursor.execute(sqlUpdate, datos)
-                    conx.commit()
-                    conx.close()
-                    messagebox.showinfo("Exito", "Usuario actualizado exitosamente")
+                    cursor.execute("SELECT * FROM Usuarios WHERE id=" + id)
+                    if cursor.fetchone() is None:
+                        messagebox.showerror("Error", "El ID no existe")
+                    else:
+                        datos = (nom, ap, corr, tel, con, id)
+                        sqlUpdate = "UPDATE Usuarios SET Nombre=?, Apellidos=?, Correo=?, Telefono=?, Contraseña=? WHERE id=?"
+                        cursor.execute(sqlUpdate, datos)
+                        conx.commit()
+                        conx.close()
+                        messagebox.showinfo("Exito", "Usuario actualizado exitosamente")
                 except sqlite3.OperationalError:
                     print("Error de actualización")
     
@@ -131,3 +135,50 @@ class Registro_clase:
                     messagebox.showinfo("Exito", "Usuario eliminado exitosamente")
             except sqlite3.OperationalError:
                     print("Error al eliminar")
+    
+    def pedido(self,Pedido,Total):
+        conx = self.conexionDB()
+        cursor = conx.cursor()
+        datos = (Pedido,Total)
+        sqlInsert = "insert into Ventas(C1,Total) values (?,?)"
+        cursor.execute(sqlInsert,datos)
+        conx.commit()
+        conx.close
+        messagebox.showinfo("Correcto","Sus datos se han registrado correctamente")
+            
+    def con_compra(self,id):
+        #1. realizar conexion DB
+        conx = self.conexionDB()
+        #2. verificar que el id vacio
+        if(id==""):
+            messagebox.showwarning("Cuidado","Escribe un identificador")
+        else:
+            #3. Ejecutar la consulta
+            try:
+                #4. Preparamos lo necesario
+                cursor=conx.cursor()
+                sqlselect= "select * from Ventas where id ="+id
+                #5. Ejecutamos y cerramos conexion
+                cursor.execute(sqlselect)
+                RSUsuario = cursor.fetchall()
+                conx.close()
+                return RSUsuario
+                
+            except sqlite3.OperationalError:
+                print("Error de consulta")
+    
+    def consultaP(self):
+        #1. realizar conexion DB
+        conx = self.conexionDB()
+        try:
+            #4. Preparamos lo necesario
+            cursor=conx.cursor()
+            sqlselect= "select * from Ventas"
+            #5. Ejecutamos y cerramos conexion
+            cursor.execute(sqlselect)
+            RSUsuarios = cursor.fetchall()
+            conx.close()
+            return RSUsuarios
+                
+        except sqlite3.OperationalError:
+            print("Error de consulta")
