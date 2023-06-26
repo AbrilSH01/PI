@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método pago</title>
+</head>
+<body>
+    <div class="titmet">
+        <header>
+            <h1>Método pago</h1>
+        </header>
+    </div>
+    <form action="/metodo_pago" method="post">
+        <label for="metodo_pago">Metodo de pago</label>
+        <select id="metodo_pago">
+            <option value="tarjeta">Tarjeta credito/debito</option>
+            <option value="efectivo">Efectivo</option>
+        </select>
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>
