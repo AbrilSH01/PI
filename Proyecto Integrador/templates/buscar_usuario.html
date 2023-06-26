@@ -7,14 +7,11 @@
     <title>Buscar usuario</title>
 </head>
 <body>
-    <div class="titbusqu">
-        <header>
-            <h1>Buscar usuario</h1>
-        </header>
-    </div>
     <form action="/buscar_usuario" method="post">
-        <input type="text" placeholder="Nombre usuario">
-        <button type="submit">Buscar</button>
+        <div class="input-box">
+            <input type="text" placeholder="Folio pedido" class="input-control">
+        </div>
+        <button type="submit" class="btn">Buscar</button>
         <table>
             <table>
                 <thead>
@@ -26,7 +23,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    <tr>
+                        <td>01</td>
+                        <td>Rodrigo</td>
+                        <td>Garcia Castro</td>
+                        <td>121037801@upq.edu.mx</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>Ximena</td>
+                        <td>Gutierrez Jimenez</td>
+                        <td>1210378808@upq.edu.mx</td>
+                    </tr>
                 </tbody>
         </table>
     </form>

@@ -7,28 +7,39 @@
     <title>Buscar pedido</title>
 </head>
 <body>
-    <div class="titbusqu">
-        <header>
-            <h1>Buscar pedido</h1>
-        </header>
-    </div>
-    <form action="/buscar_pedito" method="post">
-        <input type="text" placeholder="Folio pedido">
-        <button type="submit">Buscar</button>
-    </form>
-    <table>
+        <form action="/buscar_pedito" method="post">
+        <div class="contenedor">
+            <div class="input-box">
+                <input type="text" placeholder="Folio pedido" class="input-control">
+            </div>
+            <button type="submit" class="btn">Buscar</button>
+        </div>
+            <div class="container"></div>
         <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Cliente</th>
-                    <th>Productos</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-            </tbody>
-    </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Productos</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01</td>
+                        <td>Rodrigo Garcia</td>
+                        <td>Pizza, hamburguesa, frappe</td>
+                        <td>$100</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>Ximena Garcia</td>
+                        <td>Hamburguesa, frappe</td>
+                        <td>$85</td>
+                    </tr>
+                </tbody>
+        </table>
+    </form>   
 </body>
 </html>
