@@ -106,3 +106,21 @@ select{
     overflow: hidden;
     margin: 30px;
 }
+#tarjeta_fields {
+    display: none;
+}
+
+#tarjeta_fields label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#tarjeta_fields input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+#tarjeta_fields input[type="text"] + br {
+    display: none;
+}
