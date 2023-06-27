@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styleRegistro.css">
     <title>Actualizar usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleRegistro.css') }}">
 </head>
 <body>
     <div class="form-main">
         <div class="form-conte">
             <div class="box">
                 <h3>Actualizacion de usuarios</h3>
-                <form action="/Actualizar_usuario" method="post">
+                <form action="/actualizar" method="post">
                     <div class="input-box">
                         <input type="text" placeholder="Nombre" class="input-control">
                     </div>

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styleBuscar.css">
     <title>Buscar usuario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleBuscar.css') }}">
 </head>
 <body>
-    <form action="/buscar_usuario" method="post">
+    <form action="/consultar" method="post">
         <div class="input-box">
             <h1>Buscar usuario</h1>
             <input type="text" placeholder="Folio pedido" class="input-control">

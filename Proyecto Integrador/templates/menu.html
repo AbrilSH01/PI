@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styleMenu.css">
     <title>Menú</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMenu.css') }}">
 </head>
 <body>
     <h1>Menu</h1>
     <form action="/menu" method="post">
         <div class="wrap column-4 columns">
 
-            <div class="tarjeta-caf" style="background: url(img/latte.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/latte.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Latte</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -25,7 +26,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/pay.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/pay.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Pay</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -39,7 +41,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/cheesecake.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/cheesecake.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Cheesecake</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -53,7 +56,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/matcha.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/matcha.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Matcha</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -67,7 +71,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/espresso.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/espresso.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Espresso</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -81,7 +86,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/hotdog.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/hotdog.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Hot dog</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -95,7 +101,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/frappe.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/frappe.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Frappe</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -109,7 +116,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/hamburguesa.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/hamburguesa.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Hamburguesa</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -123,7 +131,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/sandwitch.jpg) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/sandwitch.jpg') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Sandwitch</h3>
                     <div class="cta-wrap_tarjeta-caf">
@@ -137,7 +146,8 @@
                 </div>
             </div>
 
-            <div class="tarjeta-caf" style="background: url(img/pizza.png) center; background-size: cover;">
+            <div class="tarjeta-caf" style="background: url('{{ url_for('static', filename='img/pizza.png') }}') center; background-size: cover;">
+
                 <div class="wrap-text_tarjeta-caf">
                     <h3>Pizza</h3>
                     <div class="cta-wrap_tarjeta-caf">

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleRegistro.css') }}">
+</head>
+<body>
+    <div class="form-main">
+        <div class="form-conte">
+            <div class="box">
+        <h3>Menú Principal</h3>
+        
+        <form action="{{ url_for('menu') }}" method="GET">
+            <button type="submit" class="btn iniciar-sesion-btn">Ordenar</button>
+        </form>
+
+        <form action="{{ url_for('buscar') }}" method="GET">
+            <button type="submit" class="btn iniciar-sesion-btn">Buscar pedido</button>
+        </form>
+
+        <form action="{{ url_for('actualizar') }}" method="GET">
+            <button type="submit" class="btn iniciar-sesion-btn">Actualizar usuario</button>
+        </form>
+
+        <form action="{{ url_for('consultar') }}" method="GET">
+            <button type="submit" class="btn iniciar-sesion-btn">Consultar usuarios</button>
+        </form>
+
+        <form action="{{ url_for('met') }}" method="GET">
+            <button type="submit" class="btn iniciar-sesion-btn">Metodos de pago</button>
+        </form>
+
+            </div>
+        </div>
+    </div>  
+        
+    
+</body>
+</html>

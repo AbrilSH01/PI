@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styleMetodo.css">
     <title>Método pago</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMetodo.css') }}">
 </head>
 <body>
     <div class="titmet">
@@ -12,7 +12,7 @@
             <h1>Método pago</h1>
         </header>
     </div>
-    <form action="/metodo_pago" method="post">
+    <form action="/met" method="post">
     <div class="select">
         <select id="metodo_pago">
             <option selected disabled>Metodo de pago</option>
