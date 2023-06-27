@@ -9,6 +9,7 @@
 <body>
     <form action="/buscar_usuario" method="post">
         <div class="input-box">
+            <h1>Buscar usuario</h1>
             <input type="text" placeholder="Folio pedido" class="input-control">
         </div>
         <button type="submit" class="btn">Buscar</button>
@@ -20,6 +21,7 @@
                         <th>Nombre</th>
                         <th>Apellidos</th>
                         <th>Correo</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,12 +30,14 @@
                         <td>Rodrigo</td>
                         <td>Garcia Castro</td>
                         <td>121037801@upq.edu.mx</td>
+                        <td><button class="btnD">Eliminar</button></td>
                     </tr>
                     <tr>
                         <td>02</td>
                         <td>Ximena</td>
                         <td>Gutierrez Jimenez</td>
                         <td>1210378808@upq.edu.mx</td>
+                        <td><button class="btnD">Eliminar</button></td> 
                     </tr>
                 </tbody>
         </table>

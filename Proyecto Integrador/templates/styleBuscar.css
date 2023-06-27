@@ -6,6 +6,8 @@ html{
     --lead: hsl(162, 2%, 56%);
     --blue: hsl(220, 85%, 57%);
     --violet: hsl(272, 92%, 32%);
+    --red: hsl(12, 52%, 42%);
+    --orange: hsl(19, 91%, 32%);
     --tex-white: hsl(0, 0%, 100%);
     --text-light-gray: hsl(0, 0%, 90%);
     --body-bg-color: hsl(200, 54%, 12%);
@@ -30,9 +32,9 @@ body{
 }
 body{
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
 }
 body::after,
 body::before{
@@ -69,7 +71,7 @@ body::after{
     font-weight: inherit;
     font-family: inherit;
     font-size: 16px;
-    margin: 10px;
+    margin: 20px;
 }
 .input-control:focus{
     outline: none;
@@ -89,7 +91,7 @@ body::after{
     position: relative;
     z-index: 1;
     overflow: hidden;
-    margin: 10px;
+    margin: 30px;
 }
 
 .conteiner{
@@ -118,4 +120,21 @@ tbody tr{
 }
 tbody tr:hover{
     background: rgba(243, 183, 199, 0.4);
+}
+.btnD{
+    height: 30px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--red), var(--orange));
+    border: none;
+    color: var(--text-white);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin: 10px;
 }

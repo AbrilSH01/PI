@@ -26,6 +26,13 @@ body{
     font-size: 16px;
     line-height: 1.5;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+body h1{
+    margin: 10px;
 }
 body::after,
 body::before{

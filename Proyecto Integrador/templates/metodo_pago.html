@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styleMetodo.css">
     <title>Método pago</title>
 </head>
 <body>
@@ -12,12 +13,14 @@
         </header>
     </div>
     <form action="/metodo_pago" method="post">
-        <label for="metodo_pago">Metodo de pago</label>
+    <div class="select">
         <select id="metodo_pago">
+            <option selected disabled>Metodo de pago</option>
             <option value="tarjeta">Tarjeta credito/debito</option>
             <option value="efectivo">Efectivo</option>
         </select>
-        <button type="submit">Guardar</button>
+    </div>
+    <button type="submit" class="btn">Guardar</button>
     </form>
 </body>
 </html>
