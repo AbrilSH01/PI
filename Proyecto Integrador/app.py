@@ -70,7 +70,10 @@ def menu():
 
 @app.route('/buscar', methods=['GET'])
 def buscar():
-    return render_template('buscar_pedido.html')
+    cursorBP = mysql.connection.cursor()
+    cursorBP.execute('select * from pedidos')
+    consBP = cursorBP.fetchall()
+    return render_template('buscar_pedido.html', listaPedido = consBP)
 
 @app.route('/actualizar', methods=['GET'])
 def actualizar():
@@ -79,7 +82,10 @@ def actualizar():
 
 @app.route('/consultar', methods=['GET'])
 def consultar():
-    return render_template('buscar_usuario.html')
+    cursorBU = mysql.connection.cursor()
+    cursorBU.execute('select * from usuario')
+    consBU = cursorBU.fetchall()
+    return render_template('buscar_usuario.html', listaUsuario = consBU)
 
 @app.route('/met', methods=['GET'])
 def met():

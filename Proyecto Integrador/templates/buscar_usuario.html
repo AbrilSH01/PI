@@ -18,6 +18,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Matricula</th>
                         <th>Nombre</th>
                         <th>Apellidos</th>
                         <th>Correo</th>
@@ -25,20 +26,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for alb in listaUsuario %} 
                     <tr>
-                        <td>01</td>
-                        <td>Rodrigo</td>
-                        <td>Garcia Castro</td>
-                        <td>121037801@upq.edu.mx</td>
-                        <td><button class="btnD">Eliminar</button></td>
+                        <td> {{ alb.0 }} </td>
+                        <td> {{ alb.1 }} </td>
+                        <td> {{ alb.2 }} </td>
+                        <td> {{ alb.3 }} </td>
+                        <td> {{ alb.4 }} </td>
+                        <td> 
+                            <td><button class="btnD">Eliminar</button></td>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>02</td>
-                        <td>Ximena</td>
-                        <td>Gutierrez Jimenez</td>
-                        <td>1210378808@upq.edu.mx</td>
-                        <td><button class="btnD">Eliminar</button></td> 
-                    </tr>
+                    {% endfor %}
                 </tbody>
         </table>
     </form>
