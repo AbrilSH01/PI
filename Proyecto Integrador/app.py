@@ -75,6 +75,13 @@ def buscar():
     consBP = cursorBP.fetchall()
     return render_template('buscar_pedido.html', listaPedido = consBP)
 
+@app.route('/visualizarAct/<string:id>')
+def visualizar(id):
+    cursorVis = mysql.connection.cursor()
+    cursorVis.execute('select * from usuario where id = %s', (id))
+    visualisarDatos = cursorVis.fetchone()
+    return render_template('actualizar_usuario.html', visDatos = visualisarDatos)
+
 @app.route('/actualizar', methods=['GET'])
 def actualizar():
     return render_template('actualizar_usuario.html')
