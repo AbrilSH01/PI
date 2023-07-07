@@ -80,12 +80,37 @@ def visualizar(id):
     cursorVis = mysql.connection.cursor()
     cursorVis.execute('select * from usuario where id = %s', (id))
     visualisarDatos = cursorVis.fetchone()
-    return render_template('actualizar_usuario.html', visDatos = visualisarDatos)
+    return render_template('actualizar_usuario.html', UpdUsuario = visualisarDatos)
 
-@app.route('/actualizar', methods=['GET'])
-def actualizar():
-    return render_template('actualizar_usuario.html')
 
+@app.route('/actualizar/<id>', methods=['POST'])
+def actualizar(id):
+    if request.method == 'POST':
+        varMatricula = request.form['txtMatricula']
+        varNombre = request.form['txtNombre']
+        varApellidos = request.form['txtApellidos']
+        varCorreo = request.form['txtCorreo']
+        varContraseña = request.form['txtContraseña']
+        cursorUpd = mysql.connection.cursor()
+        cursorUpd.execute('update usuario set Matricula = %s, Nombre = %s, Apellidos = %s, Correo = %s, Contraseña = %s where id = %s', (varMatricula, varNombre, varApellidos, varCorreo, varContraseña, id))
+        mysql.connection.commit()
+    flash ('El usuario con la matricula '+varMatricula+' se actualizo correctamente.')
+    return redirect(url_for('consultar'))
+
+@app.route("/confirmacion/<id>")
+def eliminar(id):
+    cursorConfi = mysql.connection.cursor()
+    cursorConfi.execute('select * from usuario where id = %s', (id,))
+    consuUsuario = cursorConfi.fetchone()
+    return render_template('borrar_usuarios.html', usuario=consuUsuario)
+
+@app.route("/eliminar/<id>", methods=['POST'])
+def eliminarBD(id):
+    cursorDlt = mysql.connection.cursor()
+    cursorDlt.execute('delete from usuario where id = %s', (id,))
+    mysql.connection.commit()
+    flash('Se elimino el usuario con id '+ id)
+    return redirect(url_for('consultar'))
 
 @app.route('/consultar', methods=['GET'])
 def consultar():

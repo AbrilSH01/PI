@@ -1,0 +1,161 @@
+html{
+    font-family: system-ui;
+}
+:root{
+    --green: hsl(162, 45%, 56%);
+    --lead: hsl(162, 2%, 56%);
+    --blue: hsl(220, 85%, 57%);
+    --violet: hsl(272, 92%, 32%);
+    --tex-white: hsl(0, 0%, 100%);
+    --text-light-gray: hsl(0, 0%, 90%);
+    --body-bg-color: hsl(200, 54%, 12%);
+    --glass-bg-color: hsl(0, 00%, 100%, 0.05);
+    --border-color: hsl(0, 0%, 100%, 0.25);
+    --blur: blur(10px);
+    --buton-hover-color: hsl(0, 0%, 0.3);
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: var(--body-bg-color);
+    color: var(--tex-white);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.5;
+    overflow: hidden;
+}
+body::after,
+body::before{
+    content: '';
+    position: fixed;
+    height: 400px;
+    width: 400px;
+    border-radius: 50%;
+    z-index: -1;
+    filter: blur(150px);
+    opacity: 0.5;
+}
+body::before{
+    background-color: var(--blue);
+    left: 0;
+    bottom: 0;
+    transform: translate(-50%);
+}
+body::after{
+    background-color: var(--violet);
+    right: 0;
+    top: 0;
+    transform: translate(50%);
+}
+.form-main{
+    min-height: 100vh;
+    padding: 60px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-conte{
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    z-index: 1;
+}
+.form-conte .box{
+    border-color:  var(--glass-bg-color);
+    border: 1px solid --border-color;
+    padding: 40px 50px;
+    border-radius: 20px;
+    backdrop-filter: var(--blur);
+}
+.form-conte h3{
+    font-size: 28px;
+    text-align: center;
+    line-height: 1.2;
+    color: var(--tex-white);
+    font-weight: 500;
+}
+.form-conte form{
+    margin: 25px 0 20px;
+}
+.form-conte .input-box{
+    margin-bottom: 25px;
+}
+.form-conte ::placeholder{
+    color: inherit;
+    opacity: 1;
+}
+.form-conte .input-control{
+    display: block;
+    height: 45px;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    color: inherit;
+    font-weight: inherit;
+    font-family: inherit;
+    font-size: 16px;
+}
+.form-conte .input-control:focus{
+    outline: none;
+}
+.form-conte .btn{
+    height: 45px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--green), var(--lead));
+    border: none;
+    color: var(--text-white);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.registrarse-btn {
+    height: 45px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--green), var(--lead));
+    border: none;
+    color: var(--text-white);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.iniciar-sesion-btn {
+    height: 45px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--green), var(--lead));
+    border: none;
+    color: var(--text-white);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin: 10px;
+}
+.form-main {
+    overflow-y: scroll;
+    height: 400px; /* Ajusta esta altura según tus necesidades */
+}

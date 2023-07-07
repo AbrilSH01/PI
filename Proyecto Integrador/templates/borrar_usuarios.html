@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación eliminar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleConfirmacion.css') }}">
+</head>
+<body>
+    <div class="form-main">
+        <div class="form-conte">
+            <div class="box">
+                <form action="/eliminar/{{usuario.0}}" method="POST">
+                <h3>¿Está seguro que desea eliminar el usuario con matricula {{usuario.1}}? </h3>
+                <button type="submit" class = 'btn'>Confirmar</button>
+                </form>
+                <a href="/consultar" ><button class="btn">Cancelar</button></a>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
