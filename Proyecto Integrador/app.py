@@ -86,15 +86,15 @@ def visualizar(id):
 @app.route('/actualizar/<id>', methods=['POST'])
 def actualizar(id):
     if request.method == 'POST':
-        varMatricula = request.form['txtMatricula']
+ 
         varNombre = request.form['txtNombre']
         varApellidos = request.form['txtApellidos']
         varCorreo = request.form['txtCorreo']
         varContraseña = request.form['txtContraseña']
         cursorUpd = mysql.connection.cursor()
-        cursorUpd.execute('update usuario set Matricula = %s, Nombre = %s, Apellidos = %s, Correo = %s, Contraseña = %s where id = %s', (varMatricula, varNombre, varApellidos, varCorreo, varContraseña, id))
+        cursorUpd.execute('update usuario set Nombre = %s, Apellidos = %s, Correo = %s, Contraseña = %s where Matricula = %s', ( varNombre, varApellidos, varCorreo, varContraseña, id))
         mysql.connection.commit()
-    flash ('El usuario con la matricula '+varMatricula+' se actualizo correctamente.')
+    flash ('El usuario con Matricula' +id +  'se actualizo correctamente.')
     return redirect(url_for('consultar'))
 
 @app.route("/confirmacion/<id>")
@@ -107,9 +107,12 @@ def eliminar(id):
 @app.route("/eliminar/<id>", methods=['POST'])
 def eliminarBD(id):
     cursorDlt = mysql.connection.cursor()
+    cursorDlt.execute('delete from tarjetas where cliente = %s', (id,))
+    mysql.connection.commit()
+    cursorDlt = mysql.connection.cursor()
     cursorDlt.execute('delete from usuario where Matricula = %s', (id,))
     mysql.connection.commit()
-    flash('Se elimino el usuario con id '+ id)
+    flash('Se elimino el usuario con Matricula'+ id)
     return redirect(url_for('consultar'))
 
 @app.route('/consultar', methods=['GET'])
