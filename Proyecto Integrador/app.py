@@ -78,7 +78,7 @@ def buscar():
 @app.route('/visualizarAct/<string:id>')
 def visualizar(id):
     cursorVis = mysql.connection.cursor()
-    cursorVis.execute('select * from usuario where id = %s', (id))
+    cursorVis.execute('select * from usuario where Matricula = %s', (id,))
     visualisarDatos = cursorVis.fetchone()
     return render_template('actualizar_usuario.html', UpdUsuario = visualisarDatos)
 
@@ -100,14 +100,14 @@ def actualizar(id):
 @app.route("/confirmacion/<id>")
 def eliminar(id):
     cursorConfi = mysql.connection.cursor()
-    cursorConfi.execute('select * from usuario where id = %s', (id,))
+    cursorConfi.execute('select * from usuario where Matricula = %s', (id,))
     consuUsuario = cursorConfi.fetchone()
     return render_template('borrar_usuarios.html', usuario=consuUsuario)
 
 @app.route("/eliminar/<id>", methods=['POST'])
 def eliminarBD(id):
     cursorDlt = mysql.connection.cursor()
-    cursorDlt.execute('delete from usuario where id = %s', (id,))
+    cursorDlt.execute('delete from usuario where Matricula = %s', (id,))
     mysql.connection.commit()
     flash('Se elimino el usuario con id '+ id)
     return redirect(url_for('consultar'))
@@ -119,8 +119,26 @@ def consultar():
     consBU = cursorBU.fetchall()
     return render_template('buscar_usuario.html', listaUsuario = consBU)
 
-@app.route('/met', methods=['GET'])
+@app.route('/met', methods=['GET', 'POST'])
 def met():
+    if request.method == 'POST':
+        if request.form['txtMet'] == 'efectivo':
+            flash('Eligio efectivo')
+            return redirect(url_for('main'))
+        
+        elif request.form['txtMet'] == 'tarjeta':
+            VMat = request.form['txtNum']
+            VEnom = request.form['txtNom']
+            VNom = request.form['txtVen']
+            VAp = request.form['txtCVV']
+    
+            
+            CS = mysql.connection.cursor()
+            CS.execute('INSERT INTO tarjetas (numero, nombre, vencimiento, CVV) VALUES (%s, %s, %s, %s)', (VMat, VEnom, VNom, VAp))
+            mysql.connection.commit()
+            flash('Tarjeta agregada correctamente')
+            return redirect(url_for('main'))
+            
     return render_template('metodo_pago.html')
 
 #Ejecucion de servidor

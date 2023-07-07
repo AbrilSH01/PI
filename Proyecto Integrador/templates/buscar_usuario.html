@@ -10,14 +10,13 @@
     <form action="/consultar" method="post">
         <div class="input-box">
             <h1>Buscar usuario</h1>
-            <input type="text" placeholder="Folio pedido" class="input-control">
+            <input type="text" placeholder="Matricula" class="input-control">
         </div>
         <button type="submit" class="btn">Buscar</button>
         <table>
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Matricula</th>
                         <th>Nombre</th>
                         <th>Apellidos</th>
@@ -32,7 +31,7 @@
                         <td> {{ alb.1 }} </td>
                         <td> {{ alb.2 }} </td>
                         <td> {{ alb.3 }} </td>
-                        <td> {{ alb.4 }} </td>
+                   
                         <td> 
                             <a href=/visualizarAct/{{alb.0}}  class="btn" >Actualizar</a>
                             <a href=/confirmacion/{{alb.0}} class="btnD">Eliminar</button>
