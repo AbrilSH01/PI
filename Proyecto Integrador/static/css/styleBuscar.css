@@ -92,6 +92,7 @@ body::after{
     z-index: 1;
     overflow: hidden;
     margin: 30px;
+    padding: 3px 5px;
 }
 
 .conteiner{
@@ -124,7 +125,7 @@ tbody tr:hover{
 .btnD{
     height: 30px;
     width: 100%;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 500;
     text-transform: capitalize;
     cursor: pointer;
@@ -137,4 +138,5 @@ tbody tr:hover{
     z-index: 1;
     overflow: hidden;
     margin: 10px;
+    padding: 3px 5px;
 }

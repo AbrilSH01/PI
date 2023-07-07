@@ -26,7 +26,7 @@
             <h1>Método pago</h1>
         </header>
     </div>
-    <form action="/met" method="post">
+    <form action="/met/{{UpdUsuario.0}}" method="post">
         <div class="select">
             <select name="txtMet" id="metodo_pago">
                 <option selected disabled>Metodo de pago</option>
@@ -35,9 +35,6 @@
             </select>
         </div>
         <div id="tarjeta_fields" style="display: none;">
-            
-            <label for="nombre_tarjeta">Matricula:</label>
-            <input type="text" id="Mat" name="txtMat"><br>
 
             <label for="numero_tarjeta">Número de tarjeta:</label>
             <input type="text" id="numero_tarjeta" name="txtNum"><br>

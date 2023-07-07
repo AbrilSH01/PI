@@ -119,15 +119,22 @@ def consultar():
     consBU = cursorBU.fetchall()
     return render_template('buscar_usuario.html', listaUsuario = consBU)
 
-@app.route('/met', methods=['GET', 'POST'])
-def met():
+@app.route('/metodo/<string:id>')
+def metodo(id):
+    cursorVis = mysql.connection.cursor()
+    cursorVis.execute('select * from usuario where Matricula = %s', (id,))
+    visualisarDatos = cursorVis.fetchone()
+    return render_template('metodo_pago.html', UpdUsuario = visualisarDatos)
+
+
+@app.route('/met/<id>', methods=['GET', 'POST'])
+def met(id):
     if request.method == 'POST':
         if request.form['txtMet'] == 'efectivo':
             flash('Eligio efectivo')
             return redirect(url_for('main'))
         
         elif request.form['txtMet'] == 'tarjeta':
-            VMatt = request.form['txtMat']
             VMat = request.form['txtNum']
             VEnom = request.form['txtNom']
             VNom = request.form['txtVen']
@@ -135,12 +142,11 @@ def met():
     
             
             CS = mysql.connection.cursor()
-            CS.execute('INSERT INTO tarjetas (cliente, numero, nombre, vencimiento, CVV) VALUES (%s, %s, %s, %s, %s)', (VMatt,VMat, VEnom, VNom, VAp))
+            CS.execute('INSERT INTO tarjetas (cliente, numero, nombre, vencimiento, CVV) VALUES (%s, %s, %s, %s, %s)', (id,VMat, VEnom, VNom, VAp))
             mysql.connection.commit()
             flash('Tarjeta agregada correctamente')
-            return redirect(url_for('main'))
+            return redirect(url_for('consultar'))
             
-    return render_template('metodo_pago.html')
 
 #Ejecucion de servidor
 if __name__ =='__main__':
