@@ -120,7 +120,16 @@ select{
     box-sizing: border-box;
     padding: 5px;
 }
-
+#tarjeta_fields input[type="number"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+}
+#tarjeta_fields input[type="date"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+}
 #tarjeta_fields input[type="text"] + br {
     display: none;
 }

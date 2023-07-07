@@ -37,16 +37,16 @@
         <div id="tarjeta_fields" style="display: none;">
 
             <label for="numero_tarjeta">Número de tarjeta:</label>
-            <input type="text" id="numero_tarjeta" name="txtNum"><br>
+            <input type="number" id="numero_tarjeta" name="txtNum" required maxlength="16" minlength="16"><br>
             
             <label for="nombre_tarjeta">Nombre en la tarjeta:</label>
-            <input type="text" id="nombre_tarjeta" name="txtNom"><br>
+            <input type="text" id="nombre_tarjeta" name="txtNom" required><br>
 
             <label for="nombre_tarjeta">Fecha de vencimiento:</label>
-            <input type="text" id="fecha_vencimiento" name="txtVen"><br>
+            <input type="text" id="fecha_vencimiento" name="txtVen" required maxlength="5" minlength="5" pattern="(0[1-9]|1[0-2])\/\d{2}" title="Ingresa una fecha en formato MM/AA" placeholder="MM/AA"><br>
 
             <label for="nombre_tarjeta">CVV:</label>
-            <input type="text" id="cvv" name="txtCVV"><br>
+            <input type="number" id="cvv" name="txtCVV" required maxlength="3" minlength="3"><br>
             
         </div>
         <button type="submit" class="btn">Guardar</button>
