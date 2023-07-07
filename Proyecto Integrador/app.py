@@ -127,6 +127,7 @@ def met():
             return redirect(url_for('main'))
         
         elif request.form['txtMet'] == 'tarjeta':
+            VMatt = request.form['txtMat']
             VMat = request.form['txtNum']
             VEnom = request.form['txtNom']
             VNom = request.form['txtVen']
@@ -134,7 +135,7 @@ def met():
     
             
             CS = mysql.connection.cursor()
-            CS.execute('INSERT INTO tarjetas (numero, nombre, vencimiento, CVV) VALUES (%s, %s, %s, %s)', (VMat, VEnom, VNom, VAp))
+            CS.execute('INSERT INTO tarjetas (cliente, numero, nombre, vencimiento, CVV) VALUES (%s, %s, %s, %s, %s)', (VMatt,VMat, VEnom, VNom, VAp))
             mysql.connection.commit()
             flash('Tarjeta agregada correctamente')
             return redirect(url_for('main'))
