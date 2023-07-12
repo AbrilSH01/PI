@@ -95,7 +95,7 @@ def actualizar(id):
         cursorUpd.execute('update usuario set Nombre = %s, Apellidos = %s, Correo = %s, Contraseña = %s where Matricula = %s', ( varNombre, varApellidos, varCorreo, varContraseña, id))
         mysql.connection.commit()
     flash ('El usuario con Matricula' + id +  'se actualizo correctamente.')
-    return redirect(url_for('consultar'))
+    return redirect(url_for('buscaru'))
 
 @app.route("/confirmacion/<id>")
 def eliminar(id):
