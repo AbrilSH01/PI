@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
 #inicialización del servidor Flask
 app = Flask(__name__)
@@ -32,7 +32,7 @@ def registro():
         CS.execute('INSERT INTO usuario (Matricula,Nombre, Apellidos, Correo, Contraseña) VALUES (%s,%s, %s, %s, %s)', (VMat, VNom, VAp, VCorr, VPass))
         mysql.connection.commit()
         flash('Usuario agregado correctamente')
-        return redirect(url_for('main'))
+        return redirect(url_for('index'))
 
     return render_template('registro_usuarios.html')
 
@@ -71,7 +71,7 @@ def menu():
 @app.route('/buscar', methods=['GET'])
 def buscar():
     cursorBP = mysql.connection.cursor()
-    cursorBP.execute('select * from pedidos')
+    cursorBP.execute('select * from ticket')
     consBP = cursorBP.fetchall()
     return render_template('buscar_pedido.html', listaPedido = consBP)
 
@@ -94,7 +94,7 @@ def actualizar(id):
         cursorUpd = mysql.connection.cursor()
         cursorUpd.execute('update usuario set Nombre = %s, Apellidos = %s, Correo = %s, Contraseña = %s where Matricula = %s', ( varNombre, varApellidos, varCorreo, varContraseña, id))
         mysql.connection.commit()
-    flash ('El usuario con Matricula' +id +  'se actualizo correctamente.')
+    flash ('El usuario con Matricula' + id +  'se actualizo correctamente.')
     return redirect(url_for('consultar'))
 
 @app.route("/confirmacion/<id>")
@@ -115,12 +115,31 @@ def eliminarBD(id):
     flash('Se elimino el usuario con Matricula'+ id)
     return redirect(url_for('consultar'))
 
-@app.route('/consultar', methods=['GET'])
-def consultar():
+@app.route('/buscaru', methods=['GET', 'POST'])
+def buscaru():
+    if request.method == 'POST':
+        VBusc = request.form['busc']
+        
+        cursorBU = mysql.connection.cursor()
+        if not VBusc:
+            cursorBU.execute('SELECT * FROM usuario')
+        else:
+            cursorBU.execute('SELECT * FROM usuario WHERE Matricula = %s', (VBusc,))
+        consBU = cursorBU.fetchall()
+        
+        if consBU is not None:
+            return render_template('buscar_Usuario.html', listaUsuario=consBU)
+        else:
+            mensaje = 'No se encontraron resultados para la fruta ingresada.'
+            return render_template('buscar_Usuario.html', mensaje=mensaje)
+    
     cursorBU = mysql.connection.cursor()
-    cursorBU.execute('select * from usuario')
+    cursorBU.execute('SELECT * FROM usuario')
     consBU = cursorBU.fetchall()
-    return render_template('buscar_usuario.html', listaUsuario = consBU)
+    return render_template('buscar_Usuario.html', listaUsuario=consBU)
+
+
+
 
 @app.route('/metodo/<string:id>')
 def metodo(id):

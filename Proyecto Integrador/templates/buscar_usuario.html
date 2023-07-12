@@ -14,12 +14,15 @@
             {%endfor%}
         {% endif %}
     {%endwith%}
-    <form action="/consultar" method="post">
+    <div class="form-main">
+    <form action="{{ url_for('buscaru')}}" method="POST">
+        
         <div class="input-box">
             <h1>Buscar usuario</h1>
-            <input type="text" placeholder="Matricula" class="input-control">
+            <input type="text" name ="busc" placeholder="Matricula" class="input-control">
         </div>
         <button type="submit" class="btn">Buscar</button>
+        
         <table>
             <table>
                 <thead>
@@ -32,6 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if listaUsuario %}
                     {% for alb in listaUsuario %} 
                     <tr>
                         <td> {{ alb.0 }} </td>
@@ -46,8 +50,14 @@
                         </td>
                     </tr>
                     {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5">No se encontraron resultados</td>
+                      </tr>
+                    {% endif %}
                 </tbody>
         </table>
     </form>
+    </div>
 </body>
 </html>

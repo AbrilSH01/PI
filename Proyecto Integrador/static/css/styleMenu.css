@@ -118,3 +118,7 @@ a{
     z-index: 1;
     overflow: hidden;
 }
+.form-main {
+    overflow-y: scroll;
+    height: 600px; /* Ajusta esta altura según tus necesidades */
+}

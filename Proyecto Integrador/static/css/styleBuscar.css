@@ -140,3 +140,8 @@ tbody tr:hover{
     margin: 10px;
     padding: 3px 5px;
 }
+.form-main {
+    overflow-y: scroll;
+    height: 600px; /* Ajusta esta altura según tus necesidades */
+    padding-right: 15px;
+}

@@ -157,5 +157,5 @@ body::after{
 }
 .form-main {
     overflow-y: scroll;
-    height: 400px; /* Ajusta esta altura según tus necesidades */
+    height: 600px; /* Ajusta esta altura según tus necesidades */
 }

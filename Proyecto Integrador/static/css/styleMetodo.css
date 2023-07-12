@@ -133,3 +133,7 @@ select{
 #tarjeta_fields input[type="text"] + br {
     display: none;
 }
+.form-main {
+    overflow-y: scroll;
+    height: 600px; /* Ajusta esta altura según tus necesidades */
+}
