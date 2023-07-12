@@ -116,7 +116,7 @@ def eliminarBD(id):
     cursorDlt.execute('delete from usuario where Matricula = %s', (id,))
     mysql.connection.commit()
     flash('Se elimino el usuario con Matricula'+ id)
-    return redirect(url_for('consultar'))
+    return redirect(url_for('buscaru'))
 
 @app.route('/buscaru', methods=['GET', 'POST'])
 def buscaru():
