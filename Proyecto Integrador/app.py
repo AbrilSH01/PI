@@ -68,12 +68,29 @@ def main():
 def menu():
     return render_template('menu.html')
 
-@app.route('/buscar', methods=['GET'])
+@app.route('/buscar', methods=['POST', 'GET'])
 def buscar():
-    cursorBP = mysql.connection.cursor()
-    cursorBP.execute('select * from ticket')
-    consBP = cursorBP.fetchall()
-    return render_template('buscar_pedido.html', listaPedido = consBP)
+    if request.method == 'POST':
+        VBusc = request.form['busc']
+        
+        cursorBU = mysql.connection.cursor()
+        if not VBusc:
+            cursorBU.execute('SELECT * FROM ticket')
+        else:
+            cursorBU.execute('SELECT * FROM ticket WHERE folio_ticket = %s', (VBusc,))
+        consBP = cursorBU.fetchall()
+        
+        if consBP is not None:
+            return render_template('buscar_pedido.html', listaPedido=consBP)
+        else:
+            mensaje = 'No se encontraron resultados.'
+            return render_template('buscar_pedido.html', mensaje=mensaje)
+    
+    cursorBU = mysql.connection.cursor()
+    cursorBU.execute('SELECT * FROM ticket')
+    consBU = cursorBU.fetchall()
+    return render_template('buscar_pedido.html', listaPedido=consBU)
+
 
 @app.route('/visualizarAct/<string:id>')
 def visualizar(id):
@@ -133,7 +150,7 @@ def buscaru():
         if consBU is not None:
             return render_template('buscar_Usuario.html', listaUsuario=consBU)
         else:
-            mensaje = 'No se encontraron resultados para la fruta ingresada.'
+            mensaje = 'No se encontraron resultados.'
             return render_template('buscar_Usuario.html', mensaje=mensaje)
     
     cursorBU = mysql.connection.cursor()
