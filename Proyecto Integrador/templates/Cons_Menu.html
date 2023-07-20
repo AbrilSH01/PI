@@ -15,11 +15,11 @@
         {% endif %}
     {%endwith%}
     <div class="form-main">
-    <form action="{{ url_for('buscaru')}}" method="POST">
+    <form action="{{ url_for('buscarm')}}" method="POST">
         
         <div class="input-box">
             <h1>Buscar usuario</h1>
-            <input type="text" name ="busc" placeholder="Matricula" class="input-control">
+            <input type="text" name ="busc" placeholder="Producto" class="input-control">
         </div>
         <button type="submit" class="btn">Buscar</button>
         
@@ -27,11 +27,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Matricula</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Correo</th>
-                        <th>Rol</th>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Precio</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -42,17 +40,10 @@
                         <td> {{ alb.0 }} </td>
                         <td> {{ alb.1 }} </td>
                         <td> {{ alb.2 }} </td>
-                        <td> {{ alb.3 }} </td>
-                        {%if alb.5 == 2 %}
-                        <td> Usuario </td>
-                        {% else %}
-                        <td> Administrador </td>
-                        {% endif %}
                    
                         <td> 
                             <a href=/visualizarAct/{{alb.0}}  class="btn" >Actualizar</a>
-                            <a href=/metodo/{{alb.0}}  class="btn" >Metodo de pago</a>
-                            <a href=/confirmacion/{{alb.0}} class="btnD">Eliminar</button>
+                            <a href=/confirmacionm/{{alb.0}} class="btnD">Eliminar</button>
                         </td>
                     </tr>
                     {% endfor %}

@@ -29,7 +29,7 @@ def registro():
         VPass = request.form['txtPass']
         
         CS = mysql.connection.cursor()
-        CS.execute('INSERT INTO usuario (Matricula,Nombre, Apellidos, Correo, Contraseña) VALUES (%s,%s, %s, %s, %s)', (VMat, VNom, VAp, VCorr, VPass))
+        CS.execute('INSERT INTO usuario (Matricula,Nombre, Apellidos, Correo, Contraseña, Rol) VALUES (%s,%s, %s, %s, %s,2)', (VMat, VNom, VAp, VCorr, VPass))
         mysql.connection.commit()
         flash('Usuario agregado correctamente')
         return redirect(url_for('index'))
@@ -49,11 +49,17 @@ def login():
         consulta = "SELECT Correo FROM usuario WHERE Correo = %s AND Contraseña = %s"
         CS.execute(consulta, (VCorr, VPass))
         resultado = CS.fetchone()
+        Rol = "Select Rol from usuario where correo = %s and contraseña = %s"
         
         # Verificar si las credenciales son válidas
         if resultado is not None:
+            CS.execute(Rol,(VCorr, VPass))
+            rol_resultado = CS.fetchone()
+            if rol_resultado is not None and rol_resultado[0] == 1:
             # Las credenciales son válidas, redirigir al menú principal
                 return render_template('main_menu.html')
+            else:
+                return render_template('mm_cl.html')
         else:
             # Las credenciales son inválidas, redirigir a la página de inicio de sesión con un mensaje de error
             flash('Correo o contraseña incorrectos. Intente nuevamente.')
@@ -63,6 +69,10 @@ def login():
 @app.route('/main', methods=['GET'])
 def main():
     return render_template('main_menu.html')
+
+@app.route('/cliente', methods=['GET'])
+def cliente():
+    return render_template('mm_cl.html')
 
 @app.route('/menu', methods=['GET'])
 def menu():
@@ -75,9 +85,10 @@ def buscar():
         
         cursorBU = mysql.connection.cursor()
         if not VBusc:
-            cursorBU.execute('SELECT * FROM ticket')
+            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID')
+
         else:
-            cursorBU.execute('SELECT * FROM ticket WHERE folio_ticket = %s', (VBusc,))
+            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID WHERE folio_ticket = %s', (VBusc,))
         consBP = cursorBU.fetchall()
         
         if consBP is not None:
@@ -85,9 +96,8 @@ def buscar():
         else:
             mensaje = 'No se encontraron resultados.'
             return render_template('buscar_pedido.html', mensaje=mensaje)
-    
     cursorBU = mysql.connection.cursor()
-    cursorBU.execute('SELECT * FROM ticket')
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID')
     consBU = cursorBU.fetchall()
     return render_template('buscar_pedido.html', listaPedido=consBU)
 
@@ -190,6 +200,63 @@ def met(id):
             return redirect(url_for('consultar'))
             
 
+@app.route('/nuevo', methods=['GET', 'POST'])
+def nuevo():
+    if request.method == 'POST':
+        VProd = request.form['txtProd']
+        VPrec = request.form['txtPrec']
+        
+        CS = mysql.connection.cursor()
+        CS.execute('INSERT INTO menu (Producto, precio) VALUES (%s,%s)', (VProd, VPrec))
+        mysql.connection.commit()
+        flash('Producto agregado correctamente')
+        return redirect(url_for('main'))
+
+    return render_template('Nuevo.html')
+
+@app.route('/buscarm', methods=['GET', 'POST'])
+def buscarm():
+    if request.method == 'POST':
+        VBusc = request.form['busc']
+        
+        cursorBU = mysql.connection.cursor()
+        if not VBusc:
+            cursorBU.execute('SELECT * FROM menu')
+        else:
+            cursorBU.execute('SELECT * FROM menu WHERE producto = %s', (VBusc,))
+        consBU = cursorBU.fetchall()
+        
+        if consBU is not None:
+            return render_template('cons_Menu.html', listaUsuario=consBU)
+        else:
+            mensaje = 'No se encontraron resultados.'
+            return render_template('cons_Menu.html', mensaje=mensaje)
+    
+    cursorBU = mysql.connection.cursor()
+    cursorBU.execute('SELECT * FROM menu')
+    consBU = cursorBU.fetchall()
+    return render_template('cons_Menu.html', listaUsuario=consBU)
+
+@app.route("/confirmacionm/<id>")
+def eliminarm(id):
+    cursorConfi = mysql.connection.cursor()
+    cursorConfi.execute('select * from menu where ID = %s', (id,))
+    consuUsuario = cursorConfi.fetchone()
+    return render_template('borrar_menu.html', menu=consuUsuario)
+
+@app.route("/eliminarm/<id>", methods=['POST'])
+def eliminarBDm(id):
+    cursorDlt = mysql.connection.cursor()
+    cursorDlt.execute('delete from ticket where id_producto = %s', (id,))
+    mysql.connection.commit()
+    cursorDlt = mysql.connection.cursor()
+    cursorDlt.execute('delete from menu where ID = %s', (id,))
+    mysql.connection.commit()
+    flash('Se elimino el producto')
+    return redirect(url_for('buscarm'))
 #Ejecucion de servidor
 if __name__ =='__main__':
     app.run(port=3000,debug=True)
+    
+    
+

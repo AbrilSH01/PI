@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleRegistro.css') }}">
+</head>
+<body>
+    {%with mensajes= get_flashed_messages()%}
+        {% if mensajes%}
+            {%for msj in mensajes%}
+                <h3> {{ msj }} </h3>
+            {%endfor%}
+        {% endif %}
+    {%endwith%}
+    <div class="form-main">
+        <div class="form-conte">
+            <div class="box">
+                <h3>Registro de usuarios</h3>
+                <form action="/nuevo" method="POST">
+                    <div class="input-box">
+                        <input type="text" Name="txtProd" placeholder="Producto" class="input-control" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="number" Name="txtPrec" placeholder="Precio" class="input-control" required>
+                    </div>
+                    <button type="submit" class="btn">Guardar</button>
+                    
+                </form>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>
