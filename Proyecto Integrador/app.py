@@ -254,6 +254,27 @@ def eliminarBDm(id):
     mysql.connection.commit()
     flash('Se elimino el producto')
     return redirect(url_for('buscarm'))
+
+
+@app.route('/registroa', methods=['GET', 'POST'])
+def registroa():
+    if request.method == 'POST':
+        VMat = request.form['txtMat']
+        VNom = request.form['txtNom']
+        VAp = request.form['txtAp']
+        VCorr = request.form['txtCorr']
+        VPass = request.form['txtPass']
+        
+        CS = mysql.connection.cursor()
+        CS.execute('INSERT INTO usuario (Matricula,Nombre, Apellidos, Correo, Contraseña, Rol) VALUES (%s,%s, %s, %s, %s,1)', (VMat, VNom, VAp, VCorr, VPass))
+        mysql.connection.commit()
+        flash('Usuario agregado correctamente')
+        return redirect(url_for('index'))
+
+    return render_template('registro_Admin.html')
+
+
+
 #Ejecucion de servidor
 if __name__ =='__main__':
     app.run(port=3000,debug=True)

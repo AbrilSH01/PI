@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleRegistro.css') }}">
+</head>
+<body>
+    {%with mensajes= get_flashed_messages()%}
+        {% if mensajes%}
+            {%for msj in mensajes%}
+                <h3> {{ msj }} </h3>
+            {%endfor%}
+        {% endif %}
+    {%endwith%}
+    <div class="form-main">
+        <div class="form-conte">
+            <div class="box">
+                <h3>Registro de Administrador</h3>
+                <form action="/registroa" method="post">
+                    <div class="input-box">
+                        <input type="text" Name="txtMat" placeholder="Matricula" class="input-control" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" Name="txtNom" placeholder="Nombre" class="input-control" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" Name="txtAp" placeholder="Apellidos" class="input-control" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" Name="txtCorr" placeholder="Correo" class="input-control" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" Name="txtPass" placeholder="Contraseña" class="input-control" required>
+                        <div class="input-link">
+                            <a href="#" class="gradient-text"></a>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Registrar</button>
+                    
+                </form>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>
