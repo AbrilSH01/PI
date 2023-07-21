@@ -57,9 +57,9 @@ def login():
             rol_resultado = CS.fetchone()
             if rol_resultado is not None and rol_resultado[0] == 1:
             # Las credenciales son válidas, redirigir al menú principal
-                return render_template('main_menu.html')
+                return redirect(url_for('main'))
             else:
-                return render_template('mm_cl.html')
+                return redirect(url_for('cliente'))
         else:
             # Las credenciales son inválidas, redirigir a la página de inicio de sesión con un mensaje de error
             flash('Correo o contraseña incorrectos. Intente nuevamente.')
@@ -268,8 +268,8 @@ def registroa():
         CS = mysql.connection.cursor()
         CS.execute('INSERT INTO usuario (Matricula,Nombre, Apellidos, Correo, Contraseña, Rol) VALUES (%s,%s, %s, %s, %s,1)', (VMat, VNom, VAp, VCorr, VPass))
         mysql.connection.commit()
-        flash('Usuario agregado correctamente')
-        return redirect(url_for('index'))
+        flash('Administrador agregado correctamente')
+        return redirect(url_for('main'))
 
     return render_template('registro_Admin.html')
 
