@@ -237,6 +237,26 @@ def buscarm():
     consBU = cursorBU.fetchall()
     return render_template('cons_Menu.html', listaUsuario=consBU)
 
+#VER ACTUALIZACIONES MENU
+@app.route('/visualizarMen/<string:id>')
+def visualizarMen(id):
+    cursorVis = mysql.connection.cursor()
+    cursorVis.execute('SELECT * FROM menu WHERE id = %s', (id, ))
+    visualisarDatos = cursorVis.fetchone()
+    return render_template('actualizar_menu.html', UpdMenu = visualisarDatos)
+
+#ACTUALIZAR PRODUCTOS
+@app.route('/actualizarm/<id>', methods=['POST'])
+def actualizarP(id):
+    if request.method == 'POST':
+        varPlatillo = request.form['txtPlatillo']
+        varPrecio = request.form['txtPrecio']
+        cursorUpd = mysql.connection.cursor()
+        cursorUpd.execute('update menu set producto = %s, precio = %s where id = %s', ( varPlatillo, varPrecio, id))
+        mysql.connection.commit()
+    flash ('El platillo  ' + varPlatillo +  ' se actualizo correctamente.')
+    return redirect(url_for('buscarm'))
+
 @app.route("/confirmacionm/<id>")
 def eliminarm(id):
     cursorConfi = mysql.connection.cursor()
