@@ -25,7 +25,7 @@ body{
     font-weight: 300;
     font-size: 16px;
     line-height: 1.5;
-    overflow: hidden;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -209,9 +209,50 @@ a.btn {
 .tarjeta-ped {
     background-repeat: no-repeat;
     height: 250px;
-    width: 150%;
+    width: 100%;
     border-radius: 6px;
     padding: 1rem .5rem;
     display: flex;
     align-items: center;
+}
+
+.wrap.column-4.columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; /* Espacio entre las tarjetas y la tabla */
+}
+
+/* Estilos para el contenedor de la tabla */
+.tabla-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+table{
+    color: #fff;
+    font-size: 14px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+thead{
+    background: rgba(140, 159, 243, 0.4);
+}
+th{
+    padding: 20px 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+td{
+    padding: 15px;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+}
+tbody tr{
+    cursor: pointer;
+}
+tbody tr:hover{
+    background: rgba(243, 183, 199, 0.4);
 }

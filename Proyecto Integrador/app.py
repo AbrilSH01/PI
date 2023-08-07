@@ -115,7 +115,12 @@ def menu():
     productos = obtener_productos()
 
     # Renderizar la plantilla HTML y pasar la lista de productos
-    return render_template('menu.html', productos=productos)
+    user_id = session.get('Matricula')
+    cursorBU = mysql.connection.cursor()
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s',(user_id,))
+    consBU = cursorBU.fetchall()
+    return render_template('menu.html', productos=productos, listaPedido=consBU)
+    
 
 def obtener_productos():
     # Conexión a la base de datos MySQL
