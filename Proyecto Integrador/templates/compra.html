@@ -44,7 +44,7 @@
 <body>
     <div class="pedido-container">
         <h1>Tu Pedido</h1>
-        <form action="/conf/{{producto_principal.0}}" method="post">
+        <form action="/agregar_al_carrito/{{ producto_principal[0] }}" method="post">
             <div class="producto">
                 <div class="tarjeta-ped" style="background: url('{{ url_for('static', filename='img/'+producto_principal[1]+'.jpg') }}') center; background-size: cover;">
                 <div class="wrap-text_tarjeta-caf">
@@ -61,8 +61,7 @@
                     <label class="label" for="cantidad">Cantidad:</label>
                     <div class="cantidad-container">
                         
-                        <input type="number" class="cnt" name="cantidad" id="cantidad" value="1" min="1" max="10" oninput="actualizarTotal()">
-                       
+                        <input type="number" class="cnt" name="cantidad" id="cantidad" value="1" min="1" max="10">
                     </div>
                 </div>
                 </div>
@@ -76,4 +75,13 @@
         <a href="/menu" class="btn">Regresar al menú</a>
     </div>
 </body>
+<script>
+    function agregarAlCarrito(productoId) {
+        fetch(`/agregar_al_carrito/${productoId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+    }
+</script>
 </html>

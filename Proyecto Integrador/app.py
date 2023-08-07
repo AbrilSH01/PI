@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_login import UserMixin
 from flask_mysqldb import MySQL
 import os
 from werkzeug.utils import secure_filename
@@ -51,6 +52,7 @@ def login_required(f):
             return redirect(url_for('index'))
         return f(*args, **kwargs)
     return decorated_function
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -497,10 +499,6 @@ def mc():
     consBU = cursorBU.fetchall()
     return render_template('mc.html', listaUsuario=consBU)
 
-
-
-
-
 @app.route('/conf/<id>')
 @login_required
 def conf(id):
@@ -516,6 +514,59 @@ def cerrar():
     session.pop('Matricula', None)
     # Redirigir al usuario a la página de inicio de sesión
     return redirect(url_for('index'))
+
+#CARRITO DE COMPRAS
+@app.route('/carrito')
+@login_required
+def carrito():
+    user_id = session.get('Matricula')
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM carrito WHERE cliente = %s', (user_id,))
+    carrito = cursor.fetchall()
+    mysql.connection.close()
+    return render_template('carrito.html', carritos=carrito)
+
+
+@app.route('/agregar_al_carrito/<int:producto_id>', methods=['POST'])
+@login_required
+def agregar_al_carrito(producto_id):
+    cantidad = int(request.form.get('cantidad'))
+    user_id = session.get('Matricula')  # ID del cliente actual
+
+    if cantidad > 0:
+        cursor = mysql.connection.cursor()
+        
+        cursor.execute('SELECT * FROM menu WHERE id = %s', (producto_id,))
+        producto = cursor.fetchone()
+        
+        if producto:
+            cursor.execute('INSERT INTO carrito (producto, cantidad, precio, cliente) VALUES (%s, %s, %s, %s)', (producto[1], cantidad, producto[2], user_id))
+            mysql.connection.commit()
+            
+        mysql.connection.close()
+    
+    return redirect(url_for('menu'))
+
+
+#INSERTAR EN TICKET
+@app.route('/ticket/<string:id>', methods=['POST'])
+def ticket(id):
+    cantidad = int(request.form.get('cantidad'))
+    
+    if cantidad > 0:
+        cursor = mysql.connection.cursor()
+        
+        cursor.execute('SELECT * FROM menu WHERE id = %s', (id,))
+        producto = cursor.fetchone()
+        
+        if producto:
+            cursor.execute('INSERT INTO ticket (id_producto, cantidad, total) VALUES (%s, %s, %s)', (producto[1], cantidad, producto[2]))
+            mysql.connection.commit()
+            
+        mysql.connection.close()
+    
+    return redirect(url_for('menu'))
+
 
 #Ejecucion de servidor
 if __name__ =='__main__':

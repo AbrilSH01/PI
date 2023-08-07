@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleBuscar.css') }}">
+    <title>Carrito de Compra</title>
+</head>
+<body>
+    <h1>Carrito de Compra</h1>
+    <ul>
+        {% for item in carrito %}
+        <li>{{ item[2] }} - Cantidad: {{ item[3] }} - Total: ${{ item[4] }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/cliente" class="btn">Regresar al menú principal</a>
+</body>
+</html>
