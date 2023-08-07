@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMenu.css') }}">
+    <script>
+        function incrementarCantidad() {
+            const cantidadInput = document.getElementById('cantidad');
+            const cantidad = parseInt(cantidadInput.value);
+            const maxCantidad = parseInt(cantidadInput.getAttribute('max'));
+
+            if (cantidad < maxCantidad) {
+                cantidadInput.value = cantidad + 1;
+            }
+        }
+
+        function decrementarCantidad() {
+            const cantidadInput = document.getElementById('cantidad');
+            const cantidad = parseInt(cantidadInput.value);
+            const minCantidad = parseInt(cantidadInput.getAttribute('min'));
+
+            if (cantidad > minCantidad) {
+                cantidadInput.value = cantidad - 1;
+            }
+        }
+
+
+            function actualizarTotal() {
+                const cantidadInput = document.getElementById('cantidad');
+                const cantidad = parseInt(cantidadInput.value);
+                const precioUnitario = parseFloat('{{producto_principal[2]}}'); // Obtén el precio del producto desde Flask y conviértelo a número
+        
+                const total = cantidad * precioUnitario;
+                document.getElementById('total').innerText = total.toFixed(2); // Actualiza el elemento con el nuevo total
+            }
+        
+            // Llama a la función para calcular el total al cargar la página
+            actualizarTotal();
+    </script>
+</head>
+<body>
+    <div class="pedido-container">
+        <h1>Tu Pedido</h1>
+        <form action="/conf/{{producto_principal.0}}" method="post">
+            <div class="producto">
+                <div class="tarjeta-ped" style="background: url('{{ url_for('static', filename='img/'+producto_principal[1]+'.jpg') }}') center; background-size: cover;">
+                <div class="wrap-text_tarjeta-caf">
+                    <h3>{{ producto_principal[1] }}</h3>
+                    <div class="cta-wrap_tarjeta-caf">
+                        <div class="precio_tarjeta-caf">
+                            <span>${{ producto_principal[2] }}</span>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            <div class="cantidad">
+                <div class="cantidad">
+                    <label class="label" for="cantidad">Cantidad:</label>
+                    <div class="cantidad-container">
+                        
+                        <input type="number" class="cnt" name="cantidad" id="cantidad" value="1" min="1" max="10" oninput="actualizarTotal()">
+                       
+                    </div>
+                </div>
+                </div>
+                <div class="label">
+                    Total: $<span id="total">{{producto_principal[2]}}</span>
+                </div>
+        <div class="confirmar-btn">
+            <button class="btn">Confirmar Pedido</button>
+        </div>
+        </form>
+        <a href="/menu" class="btn">Regresar al menú</a>
+    </div>
+</body>
+</html>

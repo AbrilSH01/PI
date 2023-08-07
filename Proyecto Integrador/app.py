@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_mysqldb import MySQL
 import os
 from werkzeug.utils import secure_filename
+from functools import wraps
 #inicialización del servidor Flask
 app = Flask(__name__)
 
@@ -40,6 +41,16 @@ def registro():
         return redirect(url_for('index'))
 
     return render_template('registro_usuarios.html')
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Verificar si el correo electrónico está almacenado en la sesión
+        if 'Matricula' not in session:
+            # Redirigir al inicio de sesión si no ha iniciado sesión
+            flash('Debe iniciar sesión para acceder a esta página.')
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -54,7 +65,7 @@ def login():
         consulta = "SELECT Correo FROM usuario WHERE Correo = %s AND Contraseña = %s"
         CS.execute(consulta, (VCorr, VPass))
         resultado = CS.fetchone()
-        Rol = "Select Rol from usuario where correo = %s and contraseña = %s"
+        Rol = "Select Rol, Matricula from usuario where correo = %s and contraseña = %s"
         
         # Verificar si las credenciales son válidas
         if resultado is not None:
@@ -62,10 +73,11 @@ def login():
             rol_resultado = CS.fetchone()
             if rol_resultado is not None and rol_resultado[0] == 1:
                  # Almacenar el ID del usuario en la sesión para marcarlo como autenticado
-                session['user_id'] = resultado[0]
+                session['Matricula'] = rol_resultado[1]
             # Las credenciales son válidas, redirigir al menú principal
                 return redirect(url_for('main'))
             else:
+                session['Matricula'] = rol_resultado[1]
                 return redirect(url_for('cliente'))
         else:
             # Las credenciales son inválidas, redirigir a la página de inicio de sesión con un mensaje de error
@@ -76,15 +88,18 @@ def login():
 
 
 @app.route('/main', methods=['GET'])
+@login_required
 def main():
     return render_template('main_menu.html')
 
 
 @app.route('/cliente', methods=['GET'])
+@login_required
 def cliente():
     return render_template('mm_cl.html')
 
 @app.route('/menu', methods=['GET', 'POST'])
+@login_required
 def menu():
     if request.method == 'POST':
         # Obtener el nombre y precio del producto agregado desde el formulario
@@ -106,7 +121,7 @@ def obtener_productos():
     cursor = mysql.connection.cursor()
 
     # Obtener todos los productos de la tabla "productos"
-    cursor.execute('SELECT producto, precio FROM Menu')
+    cursor.execute('SELECT * FROM Menu')
     productos = cursor.fetchall()
 
     # Cerrar la conexión a la base de datos
@@ -129,6 +144,7 @@ def agregar_producto(nombre, precio):
 
 
 @app.route('/buscar', methods=['POST', 'GET'])
+@login_required
 def buscar():
     if request.method == 'POST':
         VBusc = request.form['busc']
@@ -153,6 +169,7 @@ def buscar():
 
 
 @app.route('/visualizarAct/<string:id>')
+@login_required
 def visualizar(id):
     cursorVis = mysql.connection.cursor()
     cursorVis.execute('select * from usuario where Matricula = %s', (id,))
@@ -161,6 +178,7 @@ def visualizar(id):
 
 
 @app.route('/actualizar/<id>', methods=['POST'])
+@login_required
 def actualizar(id):
     if request.method == 'POST':
  
@@ -175,6 +193,7 @@ def actualizar(id):
     return redirect(url_for('buscaru'))
 
 @app.route("/confirmacion/<id>")
+@login_required
 def eliminar(id):
     cursorConfi = mysql.connection.cursor()
     cursorConfi.execute('select * from usuario where Matricula = %s', (id,))
@@ -182,6 +201,7 @@ def eliminar(id):
     return render_template('borrar_usuarios.html', usuario=consuUsuario)
 
 @app.route("/eliminar/<id>", methods=['POST'])
+@login_required
 def eliminarBD(id):
     cursorDlt = mysql.connection.cursor()
     cursorDlt.execute('delete from tarjetas where cliente = %s', (id,))
@@ -196,6 +216,7 @@ def eliminarBD(id):
     return redirect(url_for('buscaru'))
 
 @app.route('/buscaru', methods=['GET', 'POST'])
+@login_required
 def buscaru():
     if request.method == 'POST':
         VBusc = request.form['busc']
@@ -222,6 +243,7 @@ def buscaru():
 
 
 @app.route('/metodo/<string:id>')
+@login_required
 def metodo(id):
     cursorVis = mysql.connection.cursor()
     cursorVis.execute('select * from usuario where Matricula = %s', (id,))
@@ -230,6 +252,7 @@ def metodo(id):
 
 
 @app.route('/met/<id>', methods=['GET', 'POST'])
+@login_required
 def met(id):
     if request.method == 'POST':
         if request.form['txtMet'] == 'efectivo':
@@ -251,6 +274,7 @@ def met(id):
             
 
 @app.route('/nuevo', methods=['GET', 'POST'])
+@login_required
 def nuevo():
     if request.method == 'POST':
         # Obtener el nombre y precio del producto desde el formulario
@@ -287,6 +311,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/buscarm', methods=['GET', 'POST'])
+@login_required
 def buscarm():
     if request.method == 'POST':
         VBusc = request.form['busc']
@@ -310,6 +335,7 @@ def buscarm():
     return render_template('cons_Menu.html', listaUsuario=consBU)
 
 @app.route('/vista_prev', methods=['GET', 'POST'])
+@login_required
 def vista_prev():
     if request.method == 'POST':
         # Obtener el nombre y precio del producto agregado desde el formulario
@@ -355,6 +381,7 @@ def agregar_producto(nombre, precio):
 
 #VER ACTUALIZACIONES MENU
 @app.route('/visualizarMen/<string:id>')
+@login_required
 def visualizarMen(id):
     cursorVis = mysql.connection.cursor()
     cursorVis.execute('SELECT * FROM menu WHERE id = %s', (id, ))
@@ -363,6 +390,7 @@ def visualizarMen(id):
 
 #ACTUALIZAR PRODUCTOS
 @app.route('/actualizarm/<id>', methods=['POST'])
+@login_required
 def actualizarP(id):
     if request.method == 'POST':
         varPlatillo = request.form['txtPlatillo']
@@ -374,6 +402,7 @@ def actualizarP(id):
     return redirect(url_for('buscarm'))
 
 @app.route("/confirmacionm/<id>")
+@login_required
 def eliminarm(id):
     cursorConfi = mysql.connection.cursor()
     cursorConfi.execute('select * from menu where ID = %s', (id,))
@@ -381,6 +410,7 @@ def eliminarm(id):
     return render_template('borrar_menu.html', menu=consuUsuario)
 
 @app.route("/eliminarm/<id>", methods=['POST'])
+@login_required
 def eliminarBDm(id):
     cursorDlt = mysql.connection.cursor()
     cursorDlt.execute('delete from ticket where id_producto = %s', (id,))
@@ -393,6 +423,7 @@ def eliminarBDm(id):
 
 
 @app.route('/registroa', methods=['GET', 'POST'])
+@login_required
 def registroa():
     if request.method == 'POST':
         VMat = request.form['txtMat']
@@ -411,6 +442,7 @@ def registroa():
 
 
 @app.route('/visualizarActc/<string:id>')
+@login_required
 def visualizarc(id):
     cursorVis = mysql.connection.cursor()
     cursorVis.execute('select * from usuario where Matricula = %s', (id,))
@@ -419,6 +451,7 @@ def visualizarc(id):
 
 
 @app.route('/actualizarc/<id>', methods=['POST'])
+@login_required
 def actualizarc(id):
     if request.method == 'POST':
  
@@ -433,6 +466,7 @@ def actualizarc(id):
     return redirect(url_for('mc'))
 
 @app.route("/confirmacionc/<id>")
+@login_required
 def eliminarc(id):
     cursorConfi = mysql.connection.cursor()
     cursorConfi.execute('select * from usuario where Matricula = %s', (id,))
@@ -440,6 +474,7 @@ def eliminarc(id):
     return render_template('borrar_usuarios.html', usuario=consuUsuario)
 
 @app.route("/eliminarc/<id>", methods=['POST'])
+@login_required
 def eliminarBDc(id):
     cursorDlt = mysql.connection.cursor()
     cursorDlt.execute('delete from tarjetas where cliente = %s', (id,))
@@ -454,23 +489,9 @@ def eliminarBDc(id):
     return redirect(url_for('mc'))
 
 @app.route('/mc', methods=['GET', 'POST'])
+@login_required
 def mc():
-    if request.method == 'POST':
-        VBusc = request.form['busc']
-        
-        cursorBU = mysql.connection.cursor()
-        if not VBusc:
-            cursorBU.execute('SELECT * FROM usuario')
-        else:
-            cursorBU.execute('SELECT * FROM usuario WHERE Matricula = %s', (VBusc,))
-        consBU = cursorBU.fetchall()
-        
-        if consBU is not None:
-            return render_template('buscar_Usuario.html', listaUsuario=consBU)
-        else:
-            mensaje = 'No se encontraron resultados.'
-            return render_template('buscar_Usuario.html', mensaje=mensaje)
-    
+
     cursorBU = mysql.connection.cursor()
     cursorBU.execute('SELECT * FROM usuario')
     consBU = cursorBU.fetchall()
@@ -478,6 +499,23 @@ def mc():
 
 
 
+
+
+@app.route('/conf/<id>')
+@login_required
+def conf(id):
+    curEditar = mysql.connection.cursor()
+    curEditar.execute('SELECT * FROM Menu WHERE producto = %s', (id,))
+    producto_principal = curEditar.fetchone()
+
+    return render_template('compra.html', producto_principal=producto_principal)
+
+@app.route('/cerrar')
+def cerrar():
+    # Eliminar el correo electrónico del usuario de la sesión
+    session.pop('Matricula', None)
+    # Redirigir al usuario a la página de inicio de sesión
+    return redirect(url_for('index'))
 
 #Ejecucion de servidor
 if __name__ =='__main__':

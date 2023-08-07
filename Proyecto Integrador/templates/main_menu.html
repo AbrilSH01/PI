@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Principal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleRegistro.css') }}">
+    
 </head>
 <body>
     {%with mensajes= get_flashed_messages()%}
@@ -39,6 +40,9 @@
 
         <form action="{{ url_for('registroa') }}" method="GET">
             <button type="submit" class="btn iniciar-sesion-btn">Nuevo Administrador</button>
+        </form>
+        <form action="{{ url_for('cerrar') }}" method="GET">
+            <button type="submit" class="btn iniciar-sesion-btn">Cerrar Sesión</button>
         </form>
 
   
