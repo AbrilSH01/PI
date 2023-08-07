@@ -410,6 +410,74 @@ def registroa():
     return render_template('registro_Admin.html')
 
 
+@app.route('/visualizarActc/<string:id>')
+def visualizarc(id):
+    cursorVis = mysql.connection.cursor()
+    cursorVis.execute('select * from usuario where Matricula = %s', (id,))
+    visualisarDatos = cursorVis.fetchone()
+    return render_template('actualizar_usuario.html', UpdUsuario = visualisarDatos)
+
+
+@app.route('/actualizarc/<id>', methods=['POST'])
+def actualizarc(id):
+    if request.method == 'POST':
+ 
+        varNombre = request.form['txtNombre']
+        varApellidos = request.form['txtApellidos']
+        varCorreo = request.form['txtCorreo']
+        varContraseña = request.form['txtContraseña']
+        cursorUpd = mysql.connection.cursor()
+        cursorUpd.execute('update usuario set Nombre = %s, Apellidos = %s, Correo = %s, Contraseña = %s where Matricula = %s', ( varNombre, varApellidos, varCorreo, varContraseña, id))
+        mysql.connection.commit()
+    flash ('El usuario con Matricula' + id +  'se actualizo correctamente.')
+    return redirect(url_for('mc'))
+
+@app.route("/confirmacionc/<id>")
+def eliminarc(id):
+    cursorConfi = mysql.connection.cursor()
+    cursorConfi.execute('select * from usuario where Matricula = %s', (id,))
+    consuUsuario = cursorConfi.fetchone()
+    return render_template('borrar_usuarios.html', usuario=consuUsuario)
+
+@app.route("/eliminarc/<id>", methods=['POST'])
+def eliminarBDc(id):
+    cursorDlt = mysql.connection.cursor()
+    cursorDlt.execute('delete from tarjetas where cliente = %s', (id,))
+    mysql.connection.commit()
+    cursorDlt = mysql.connection.cursor()
+    cursorDlt.execute('delete from ticket where id_cliente = %s', (id,))
+    mysql.connection.commit()
+    cursorDlt = mysql.connection.cursor()
+    cursorDlt.execute('delete from usuario where Matricula = %s', (id,))
+    mysql.connection.commit()
+    flash('Se elimino el usuario con Matricula'+ id)
+    return redirect(url_for('mc'))
+
+@app.route('/mc', methods=['GET', 'POST'])
+def mc():
+    if request.method == 'POST':
+        VBusc = request.form['busc']
+        
+        cursorBU = mysql.connection.cursor()
+        if not VBusc:
+            cursorBU.execute('SELECT * FROM usuario')
+        else:
+            cursorBU.execute('SELECT * FROM usuario WHERE Matricula = %s', (VBusc,))
+        consBU = cursorBU.fetchall()
+        
+        if consBU is not None:
+            return render_template('buscar_Usuario.html', listaUsuario=consBU)
+        else:
+            mensaje = 'No se encontraron resultados.'
+            return render_template('buscar_Usuario.html', mensaje=mensaje)
+    
+    cursorBU = mysql.connection.cursor()
+    cursorBU.execute('SELECT * FROM usuario')
+    consBU = cursorBU.fetchall()
+    return render_template('mc.html', listaUsuario=consBU)
+
+
+
 
 #Ejecucion de servidor
 if __name__ =='__main__':
