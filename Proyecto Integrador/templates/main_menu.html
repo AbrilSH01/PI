@@ -15,11 +15,15 @@
             {%endfor%}
         {% endif %}
     {%endwith%}
+    <center>
+    <h2>Menú Principal del Administrador</h2>
+</center>
+        
     <div class="form-main">
         <div class="form-conte">
             <div class="box">
-        <h3>Menú Principal del Administrador</h3>
-        
+                
+       
         <form action="{{ url_for('buscarm') }}" method="GET">
             <button type="submit" class="btn iniciar-sesion-btn">Consutar Menú</button>
         </form>     

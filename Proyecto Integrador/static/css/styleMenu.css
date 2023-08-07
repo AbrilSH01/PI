@@ -102,6 +102,24 @@ a{
     color: #fff;
     font-weight: bold;
 }
+.btnD{
+    height: 30px;
+    width: 100%;
+    font-size: 17px;
+    font-weight: 500;
+    text-transform: capitalize;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--red), var(--orange));
+    border: none;
+    color: var(--text-white);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin: 10px;
+    padding: 3px 5px;
+}
 a.btn {
     display: inline-block;
     height: 45px;
@@ -166,6 +184,7 @@ a.btn {
     line-height: 50px; /* Ajusta la línea para centrar el contenido verticalmente */
     margin: 10px;
 }
+
 
 .cantidad-container {
     display: flex;

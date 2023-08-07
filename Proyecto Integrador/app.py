@@ -329,7 +329,7 @@ def buscarm():
         else:
             cursorBU.execute('SELECT * FROM menu WHERE producto = %s', (VBusc,))
         consBU = cursorBU.fetchall()
-        
+
         if consBU is not None:
             return render_template('cons_Menu.html', listaUsuario=consBU)
         else:
@@ -530,13 +530,23 @@ def buscarp():
     consBU = cursorBU.fetchall()
     return render_template('mis_pedidos.html', listaPedido=consBU)
 
-@app.route('/conf/<id>')
+@app.route('/conf/<id>', methods=['GET', 'POST'])
 @login_required
 def conf(id):
     curEditar = mysql.connection.cursor()
     curEditar.execute('SELECT * FROM Menu WHERE producto = %s', (id,))
     producto_principal = curEditar.fetchone()
 
+    if request.method == 'POST':
+        Vcant = request.form['cantidad']
+        Vtot = request.form['total']
+        user_id = session.get('Matricula')
+        cursorBU = mysql.connection.cursor()
+        cursorBU.execute('INSERT INTO ticket(folio_ticket, id_cliente, id_producto, cantidad, total) VALUES (%s, %s, %s, %s, %s)', (3, user_id, id, Vcant, Vtot))
+        mysql.connection.commit()  # Commit the changes to the database
+        cursorBU.close()
+        return redirect(url_for('menu'))
+    
     return render_template('compra.html', producto_principal=producto_principal)
 
 @app.route('/cerrar')
@@ -546,38 +556,11 @@ def cerrar():
     # Redirigir al usuario a la página de inicio de sesión
     return redirect(url_for('index'))
 
-#CARRITO DE COMPRAS
-@app.route('/carrito')
-@login_required
-def carrito():
-    user_id = session.get('Matricula')
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM carrito WHERE cliente = %s', (user_id,))
-    carrito = cursor.fetchall()
-    mysql.connection.close()
-    return render_template('carrito.html', carritos=carrito)
 
 
-@app.route('/agregar_al_carrito/<int:producto_id>', methods=['POST'])
-@login_required
-def agregar_al_carrito(producto_id):
-    cantidad = int(request.form.get('cantidad'))
-    user_id = session.get('Matricula')  # ID del cliente actual
 
-    if cantidad > 0:
-        cursor = mysql.connection.cursor()
-        
-        cursor.execute('SELECT * FROM menu WHERE id = %s', (producto_id,))
-        producto = cursor.fetchone()
-        
-        if producto:
-            cursor.execute('INSERT INTO carrito (producto, cantidad, precio, cliente) VALUES (%s, %s, %s, %s)', (producto[1], cantidad, producto[2], user_id))
-            mysql.connection.commit()
             
-        mysql.connection.close()
     
-    return redirect(url_for('menu'))
-
 
 #INSERTAR EN TICKET
 @app.route('/ticket/<string:id>', methods=['POST'])
@@ -597,6 +580,25 @@ def ticket(id):
         mysql.connection.close()
     
     return redirect(url_for('menu'))
+
+
+@app.route("/confirmacionp/<id>")
+@login_required
+def eliminarp(id):
+    cursorConfi = mysql.connection.cursor()
+    cursorConfi.execute('select * from ticket where ID = %s', (id,))
+    consuUsuario = cursorConfi.fetchone()
+    return render_template('borrar_prod.html', menu=consuUsuario)
+
+@app.route("/eliminarp/<id>", methods=['POST'])
+@login_required
+def eliminarBDp(id):
+    cursorDlt = mysql.connection.cursor()
+    cursorDlt.execute('delete from ticket where ID = %s', (id,))
+    mysql.connection.commit()
+    flash('Se elimino el producto')
+    return redirect(url_for('menu'))
+
 
 
 #Ejecucion de servidor

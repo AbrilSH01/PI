@@ -39,6 +39,7 @@
                         <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Total</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,9 @@
                         <td> {{ alb.3 }} </td>
                         <td> {{ alb.4 }} </td>
                         <td> {{ alb.5 }} </td>
+                        <td>
+                            <a href=/confirmacionp/{{alb.0}} class="btnD">Eliminar</a>
+                        </td>
                     </tr>
                     {% endfor %}
                     {% else %}
