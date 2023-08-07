@@ -102,7 +102,8 @@ a{
     color: #fff;
     font-weight: bold;
 }
-.btn{
+a.btn {
+    display: inline-block;
     height: 45px;
     width: 100%;
     font-size: 16px;
@@ -111,12 +112,13 @@ a{
     cursor: pointer;
     border-radius: 25px;
     user-select: none;
-    background: linear-gradient(to right, var(--green), var(--lead));
+    background: linear-gradient(to right, var(--green), var(--plomo)); /* Cambiar "--lead" por "--plomo" */
     border: none;
-    color: var(--text-white);
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
+    color: var(--tex-white);
+    text-decoration: none;
+    text-align: center;
+    line-height: 45px;
+    margin: 10px;
 }
 .form-main {
     overflow-y: scroll;

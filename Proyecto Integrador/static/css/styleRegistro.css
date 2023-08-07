@@ -120,7 +120,7 @@ body::after{
     margin: 10px;
 }
 
-.registrarse-btn {
+.registrarse-btn{
     height: 45px;
     width: 100%;
     font-size: 16px;
@@ -158,4 +158,87 @@ body::after{
 .form-main {
     overflow-y: scroll;
     height: 600px; /* Ajusta esta altura según tus necesidades */
+}
+
+/* Estilos para el textarea */
+textarea {
+    display: block;
+    width: 100%;
+    height: 150px; /* Ajusta la altura según tus necesidades */
+    padding: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; /* Permite redimensionar verticalmente el textarea */
+  }
+  
+  /* Estilo para el placeholder del textarea */
+  textarea::placeholder {
+    color: #999;
+  }
+  
+  /* Estilos adicionales para el textarea enfocado */
+  textarea:focus {
+    outline: none;
+    border-color: #e54e42; /* Cambia el color del borde cuando el textarea está enfocado */
+    box-shadow: 0 0 5px rgba(229, 78, 66, 0.5); /* Agrega una sombra suave cuando el textarea está enfocado */
+  }
+/* Tu CSS anterior */
+
+/* Estilos para el campo de selección de archivo */
+input[type="file"] {
+    display: none; /* Oculta el campo de selección de archivo predeterminado */
+}
+
+/* Estilos para el botón de selección de archivo */
+label[for="imagen_producto"] {
+    display: inline-block;
+    height: 45px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--green), var(--lead));
+    border: none;
+    color: var(--text-white);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin: 10px;
+    text-align: center;
+    line-height: 45px;
+}
+
+/* Estilos adicionales para el botón de selección de archivo al pasar el ratón */
+label[for="imagen_producto"]:hover {
+    background: linear-gradient(to right, var(--green), var(--buton-hover-color));
+}
+  
+a.btn {
+    display: inline-block;
+    height: 45px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--green), var(--lead));
+    border: none;
+    color: var(--text-white);
+    text-decoration: none; /* Elimina la subrayado del enlace */
+    text-align: center;
+    line-height: 45px;
+    margin: 10px;
+}
+
+/* Estilos adicionales para el botón y el enlace al pasar el ratón */
+.btn:hover,
+a.btn:hover {
+    background: linear-gradient(to right, var(--green), var(--buton-hover-color));
 }

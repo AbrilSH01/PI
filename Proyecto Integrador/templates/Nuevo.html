@@ -17,21 +17,27 @@
     <div class="form-main">
         <div class="form-conte">
             <div class="box">
-                <h3>Registro de usuarios</h3>
-                <form action="/nuevo" method="POST">
-                    <div class="input-box">
-                        <input type="text" Name="txtProd" placeholder="Producto" class="input-control" required>
-                    </div>
-                    <div class="input-box">
-                        <input type="number" Name="txtPrec" placeholder="Precio" class="input-control" required>
-                    </div>
-                    <button type="submit" class="btn">Guardar</button>
-                    
-                    <a href="/main" class="btn">Regresar al menú principal</a>
+                
+<h1>Registro de Nuevo Producto</h1>
+<form action="/nuevo" method="post" enctype="multipart/form-data">
+    <div class="input-box">
+        <input type="text" Name="txtProd" placeholder="Nombre del Producto" class="input-control" required>
+    </div>
+    <div class="input-box">
+        <input type="number" Name="txtPrec" placeholder="Precio" class="input-control" required>
+    </div>
+    
+    <div>
+        <label for="imagen_producto">Agregar Imagen del Producto</label>
+        <input type="file" id="imagen_producto" name="imagen_producto" accept="image/*" required>
+    </div>
+    <div>
+        <button type="submit" class="btn">Registrar Producto</button>
+    </div>
+    <a href="/main" class="btn">Regresar al menú principal</a>
+</form>
 
-                </form>
-            </div>
-        </div>
-    </div>    
+
+
 </body>
 </html>

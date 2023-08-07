@@ -21,7 +21,10 @@
         
         <form action="{{ url_for('buscarm') }}" method="GET">
             <button type="submit" class="btn iniciar-sesion-btn">Consutar Menú</button>
-        </form>                     
+        </form>     
+        <form action="{{ url_for('vista_prev') }}" method="GET">
+            <button type="submit" class="btn iniciar-sesion-btn">Vista previa</button>
+        </form>                 
         <form action="{{ url_for('nuevo') }}" method="GET">
             <button type="submit" class="btn iniciar-sesion-btn">Nuevo Producto</button>
         </form>

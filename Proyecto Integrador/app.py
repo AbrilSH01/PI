@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
+import os
+from werkzeug.utils import secure_filename
 #inicialización del servidor Flask
 app = Flask(__name__)
 
@@ -8,8 +10,11 @@ app.config['MYSQL_HOST']="localhost"
 app.config['MYSQL_USER']="root"
 app.config['MYSQL_PASSWORD']=""
 app.config['MYSQL_DB']="cafeteriaapp"
+app.config['UPLOAD_FOLDER'] = 'Proyecto integrador/static/img'
 
 app.secret_key='mysecretkey'
+
+
 mysql= MySQL(app)
 
 #Declaramos una ruta
@@ -56,6 +61,8 @@ def login():
             CS.execute(Rol,(VCorr, VPass))
             rol_resultado = CS.fetchone()
             if rol_resultado is not None and rol_resultado[0] == 1:
+                 # Almacenar el ID del usuario en la sesión para marcarlo como autenticado
+                session['user_id'] = resultado[0]
             # Las credenciales son válidas, redirigir al menú principal
                 return redirect(url_for('main'))
             else:
@@ -66,17 +73,60 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
+
+
 @app.route('/main', methods=['GET'])
 def main():
     return render_template('main_menu.html')
+
 
 @app.route('/cliente', methods=['GET'])
 def cliente():
     return render_template('mm_cl.html')
 
-@app.route('/menu', methods=['GET'])
+@app.route('/menu', methods=['GET', 'POST'])
 def menu():
-    return render_template('menu.html')
+    if request.method == 'POST':
+        # Obtener el nombre y precio del producto agregado desde el formulario
+        nombre_producto = request.form['nombre_producto']
+        precio_producto = request.form['precio_producto']
+
+        # Agregar el producto a la base de datos
+        agregar_producto(nombre_producto, precio_producto)
+
+    # Obtener todos los productos de la base de datos
+    productos = obtener_productos()
+
+    # Renderizar la plantilla HTML y pasar la lista de productos
+    return render_template('menu.html', productos=productos)
+
+def obtener_productos():
+    # Conexión a la base de datos MySQL
+   
+    cursor = mysql.connection.cursor()
+
+    # Obtener todos los productos de la tabla "productos"
+    cursor.execute('SELECT producto, precio FROM Menu')
+    productos = cursor.fetchall()
+
+    # Cerrar la conexión a la base de datos
+    cursor.close()
+
+    return productos
+
+def agregar_producto(nombre, precio):
+    # Conexión a la base de datos MySQL
+    cursor = mysql.connection.cursor()
+
+    # Insertar el producto en la tabla "productos"
+    cursor.execute('INSERT INTO Menu (producto, precio) VALUES (%s, %s)', (nombre, precio))
+
+    # Guardar los cambios en la base de datos
+    cursor.commit()
+
+    # Cerrar la conexión a la base de datos
+    cursor.close()
+
 
 @app.route('/buscar', methods=['POST', 'GET'])
 def buscar():
@@ -203,16 +253,38 @@ def met(id):
 @app.route('/nuevo', methods=['GET', 'POST'])
 def nuevo():
     if request.method == 'POST':
-        VProd = request.form['txtProd']
-        VPrec = request.form['txtPrec']
-        
-        CS = mysql.connection.cursor()
-        CS.execute('INSERT INTO menu (Producto, precio) VALUES (%s,%s)', (VProd, VPrec))
-        mysql.connection.commit()
-        flash('Producto agregado correctamente')
-        return redirect(url_for('main'))
+        # Obtener el nombre y precio del producto desde el formulario
+        nombre_producto = request.form['txtProd']
+        precio_producto = request.form['txtPrec']
+
+        # Obtener el archivo de imagen del formulario
+        imagen_producto = request.files['imagen_producto']
+
+        # Verificar si se proporcionó una imagen
+        if imagen_producto and allowed_file(imagen_producto.filename):
+            # Generar un nombre único para el archivo de imagen
+            nombre_archivo = secure_filename(nombre_producto) + '.jpg'
+            
+
+            # Guardar el archivo en la carpeta "img" dentro de "static"
+            imagen_producto.save(os.path.join(app.config['UPLOAD_FOLDER'], nombre_archivo))
+
+            # Guardar el nombre y precio del producto en la base de datos
+            CS = mysql.connection.cursor()
+            CS.execute('INSERT INTO menu (Producto, precio) VALUES (%s,%s)', (nombre_producto, precio_producto))
+            mysql.connection.commit()
+
+            # Mostrar un mensaje flash para indicar que el producto se registró correctamente
+            flash(f'El producto {nombre_producto} se ha registrado correctamente', 'success')
+
+            # Redireccionar al menú principal o a donde desees después de guardar el producto
+            return redirect(url_for('vista_prev'))
 
     return render_template('Nuevo.html')
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/buscarm', methods=['GET', 'POST'])
 def buscarm():
@@ -236,6 +308,50 @@ def buscarm():
     cursorBU.execute('SELECT * FROM menu')
     consBU = cursorBU.fetchall()
     return render_template('cons_Menu.html', listaUsuario=consBU)
+
+@app.route('/vista_prev', methods=['GET', 'POST'])
+def vista_prev():
+    if request.method == 'POST':
+        # Obtener el nombre y precio del producto agregado desde el formulario
+        nombre_producto = request.form['nombre_producto']
+        precio_producto = request.form['precio_producto']
+
+        # Agregar el producto a la base de datos
+        agregar_producto(nombre_producto, precio_producto)
+
+    # Obtener todos los productos de la base de datos
+    productos = obtener_productos()
+
+    # Renderizar la plantilla HTML y pasar la lista de productos
+    return render_template('vp.html', productos=productos)
+
+def obtener_productos():
+    # Conexión a la base de datos MySQL
+   
+    cursor = mysql.connection.cursor()
+
+    # Obtener todos los productos de la tabla "productos"
+    cursor.execute('SELECT producto, precio FROM Menu')
+    productos = cursor.fetchall()
+
+    # Cerrar la conexión a la base de datos
+    cursor.close()
+
+    return productos
+
+def agregar_producto(nombre, precio):
+    # Conexión a la base de datos MySQL
+    cursor = mysql.connection.cursor()
+
+    # Insertar el producto en la tabla "productos"
+    cursor.execute('INSERT INTO Menu (producto, precio) VALUES (%s, %s)', (nombre, precio))
+
+    # Guardar los cambios en la base de datos
+    cursor.commit()
+
+    # Cerrar la conexión a la base de datos
+    cursor.close()
+
 
 #VER ACTUALIZACIONES MENU
 @app.route('/visualizarMen/<string:id>')
