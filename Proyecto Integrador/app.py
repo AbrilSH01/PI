@@ -493,11 +493,37 @@ def eliminarBDc(id):
 @app.route('/mc', methods=['GET', 'POST'])
 @login_required
 def mc():
-
+    user_id = session.get('Matricula')
     cursorBU = mysql.connection.cursor()
-    cursorBU.execute('SELECT * FROM usuario')
+    cursorBU.execute('SELECT * FROM usuario where Matricula = %s',(user_id,))
     consBU = cursorBU.fetchall()
     return render_template('mc.html', listaUsuario=consBU)
+
+
+@app.route('/buscarp', methods=['POST', 'GET'])
+@login_required
+def buscarp():
+    if request.method == 'POST':
+        VBusc = request.form['busc']
+        user_id = session.get('Matricula')
+        cursorBU = mysql.connection.cursor()
+        if not VBusc:
+            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s',(user_id,))
+
+        else:
+            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID WHERE t.id_cliente = %s AND folio_ticket = %s', (user_id,VBusc, ))
+        consBP = cursorBU.fetchall()
+        
+        if consBP is not None:
+            return render_template('mis_pedidos.html', listaPedido=consBP)
+        else:
+            mensaje = 'No se encontraron resultados.'
+            return render_template('bmis_pedidos.html', mensaje=mensaje)
+    user_id = session.get('Matricula')
+    cursorBU = mysql.connection.cursor()
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s',(user_id,))
+    consBU = cursorBU.fetchall()
+    return render_template('mis_pedidos.html', listaPedido=consBU)
 
 @app.route('/conf/<id>')
 @login_required
