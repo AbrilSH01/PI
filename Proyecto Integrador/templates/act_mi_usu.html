@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleRegistro.css') }}">
+</head>
+<body>
+    <div class="form-main">
+        <div class="form-conte">
+            <div class="box">
+                <h3>Actualizacion de usuarios</h3>
+                <form action="/actualizarc/{{UpdUsuario.0}}" method="post">
+                    <div class="input-box">
+                        <input type="text" name="txtNombre" placeholder="Nombre" class="input-control" value="{{UpdUsuario.1}}" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" name="txtApellidos" placeholder="Apellidos" class="input-control" value="{{UpdUsuario.2}}" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" name="txtCorreo" placeholder="Correo" class="input-control" value="{{UpdUsuario.3}}" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" name="txtContraseña" placeholder="Contraseña" class="input-control" value="{{UpdUsuario.4}}" required>
+                        <div class="input-link">
+                            <a href="#" class="gradient-text"></a>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Actualizar</button>
+
+                    <a href="/mc" class="btn">Regresar</a>
+
+                </form>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>

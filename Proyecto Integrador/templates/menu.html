@@ -28,6 +28,7 @@
             </div>
         </div>
         {% endfor %}
+    </div>
         <div class="tabla-container">
             <center><h1>Mi Pedido</h1></center>
         <table>
@@ -58,7 +59,7 @@
                     {% endfor %}
                     {% else %}
                     <tr>
-                        <td colspan="5">No se encontraron resultados</td>
+                        <td colspan="5">No se ha agregado ningun producto</td>
                       </tr>
                     {% endif %}
                     </tbody>
@@ -66,10 +67,12 @@
             
     </div>
 
-    </div>
+    
     <center>
-    <button type="submit" class="btn">Realizar Pedido</button>
-    <a href="/cliente" class="btn">Regresar al menú principal</a>
-</center>
+        <form action="/orden">
+            <button type="submit" class="btn" name="realizar_pedido">Realizar Pedido</button>
+        </form>
+        <a href="/cliente" class="btn">Regresar al menú principal</a>
+    </center>
 </body>
 </html>

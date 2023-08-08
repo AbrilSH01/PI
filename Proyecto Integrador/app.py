@@ -103,23 +103,21 @@ def cliente():
 @app.route('/menu', methods=['GET', 'POST'])
 @login_required
 def menu():
-    if request.method == 'POST':
-        # Obtener el nombre y precio del producto agregado desde el formulario
-        nombre_producto = request.form['nombre_producto']
-        precio_producto = request.form['precio_producto']
-
-        # Agregar el producto a la base de datos
-        agregar_producto(nombre_producto, precio_producto)
 
     # Obtener todos los productos de la base de datos
     productos = obtener_productos()
 
     # Renderizar la plantilla HTML y pasar la lista de productos
+    ultimo_folio = obtener_ultimo_folio()
     user_id = session.get('Matricula')
     cursorBU = mysql.connection.cursor()
-    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s',(user_id,))
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s and t.folio_ticket = %s',(user_id, ultimo_folio))
     consBU = cursorBU.fetchall()
+    flash("Su orden es la numero " + str(ultimo_folio)) 
     return render_template('menu.html', productos=productos, listaPedido=consBU)
+
+
+
     
 
 def obtener_productos():
@@ -148,6 +146,38 @@ def agregar_producto(nombre, precio):
 
     # Cerrar la conexión a la base de datos
     cursor.close()
+
+@app.route('/orden', methods=['GET', 'POST'])
+@login_required
+def orden():
+    
+    
+
+    # Obtener todos los productos de la base de datos
+    productos = obtener_productos()
+
+    # Obtener el último folio incrementado
+    nuevo_folio = obtener_ultimo_folio()
+
+    # Renderizar la plantilla HTML y pasar la lista de productos y el nuevo folio
+    user_id = session.get('Matricula')
+    cursorBU = mysql.connection.cursor()
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s and t.folio_ticket = %s',(user_id, nuevo_folio))
+    consBU = cursorBU.fetchall()
+    CS = mysql.connection.cursor()
+    CS.execute('INSERT INTO orden (x) VALUES (1)')
+    mysql.connection.commit()
+    return render_template('orden.html', productos=productos, listaPedido=consBU, nuevo_folio=nuevo_folio)
+   
+
+def obtener_ultimo_folio():
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT MAX(ID) FROM orden')
+    ultimo_folio = cursor.fetchone()[0]
+    cursor.close()
+
+    return ultimo_folio or 1
+
 
 
 @app.route('/buscar', methods=['POST', 'GET'])
@@ -454,7 +484,7 @@ def visualizarc(id):
     cursorVis = mysql.connection.cursor()
     cursorVis.execute('select * from usuario where Matricula = %s', (id,))
     visualisarDatos = cursorVis.fetchone()
-    return render_template('actualizar_usuario.html', UpdUsuario = visualisarDatos)
+    return render_template('act_mi_usu.html', UpdUsuario = visualisarDatos)
 
 
 @app.route('/actualizarc/<id>', methods=['POST'])
@@ -469,7 +499,7 @@ def actualizarc(id):
         cursorUpd = mysql.connection.cursor()
         cursorUpd.execute('update usuario set Nombre = %s, Apellidos = %s, Correo = %s, Contraseña = %s where Matricula = %s', ( varNombre, varApellidos, varCorreo, varContraseña, id))
         mysql.connection.commit()
-    flash ('El usuario con Matricula' + id +  'se actualizo correctamente.')
+    flash ('El usuario se actualizo correctamente.')
     return redirect(url_for('mc'))
 
 @app.route("/confirmacionc/<id>")
@@ -478,7 +508,7 @@ def eliminarc(id):
     cursorConfi = mysql.connection.cursor()
     cursorConfi.execute('select * from usuario where Matricula = %s', (id,))
     consuUsuario = cursorConfi.fetchone()
-    return render_template('borrar_usuarios.html', usuario=consuUsuario)
+    return render_template('elim_mi_usu.html', usuario=consuUsuario)
 
 @app.route("/eliminarc/<id>", methods=['POST'])
 @login_required
@@ -492,8 +522,9 @@ def eliminarBDc(id):
     cursorDlt = mysql.connection.cursor()
     cursorDlt.execute('delete from usuario where Matricula = %s', (id,))
     mysql.connection.commit()
-    flash('Se elimino el usuario con Matricula'+ id)
-    return redirect(url_for('mc'))
+    session.pop('Matricula', None)
+    flash('Se elimino su cuenta')
+    return redirect(url_for('login'))
 
 @app.route('/mc', methods=['GET', 'POST'])
 @login_required
@@ -542,7 +573,9 @@ def conf(id):
         Vtot = request.form['total']
         user_id = session.get('Matricula')
         cursorBU = mysql.connection.cursor()
-        cursorBU.execute('INSERT INTO ticket(folio_ticket, id_cliente, id_producto, cantidad, total) VALUES (%s, %s, %s, %s, %s)', (3, user_id, id, Vcant, Vtot))
+        ultimo_folio=obtener_ultimo_folio()
+        
+        cursorBU.execute('INSERT INTO ticket(folio_ticket, id_cliente, id_producto, cantidad, total) VALUES (%s, %s, %s, %s, %s)', (ultimo_folio, user_id, id, Vcant, Vtot))
         mysql.connection.commit()  # Commit the changes to the database
         cursorBU.close()
         return redirect(url_for('menu'))
@@ -555,31 +588,6 @@ def cerrar():
     session.pop('Matricula', None)
     # Redirigir al usuario a la página de inicio de sesión
     return redirect(url_for('index'))
-
-
-
-
-            
-    
-
-#INSERTAR EN TICKET
-@app.route('/ticket/<string:id>', methods=['POST'])
-def ticket(id):
-    cantidad = int(request.form.get('cantidad'))
-    
-    if cantidad > 0:
-        cursor = mysql.connection.cursor()
-        
-        cursor.execute('SELECT * FROM menu WHERE id = %s', (id,))
-        producto = cursor.fetchone()
-        
-        if producto:
-            cursor.execute('INSERT INTO ticket (id_producto, cantidad, total) VALUES (%s, %s, %s)', (producto[1], cantidad, producto[2]))
-            mysql.connection.commit()
-            
-        mysql.connection.close()
-    
-    return redirect(url_for('menu'))
 
 
 @app.route("/confirmacionp/<id>")
@@ -598,6 +606,7 @@ def eliminarBDp(id):
     mysql.connection.commit()
     flash('Se elimino el producto')
     return redirect(url_for('menu'))
+
 
 
 
