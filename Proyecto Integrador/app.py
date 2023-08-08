@@ -332,7 +332,7 @@ def nuevo():
         # Verificar si se proporcionó una imagen
         if imagen_producto and allowed_file(imagen_producto.filename):
             # Generar un nombre único para el archivo de imagen
-            nombre_archivo = secure_filename(nombre_producto) + '.jpg'
+            nombre_archivo = nombre_producto + '.jpg'
             
 
             # Guardar el archivo en la carpeta "img" dentro de "static"
