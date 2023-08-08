@@ -164,7 +164,7 @@ def orden():
     # Renderizar la plantilla HTML y pasar la lista de productos y el nuevo folio
     user_id = session.get('Matricula')
     cursorBU = mysql.connection.cursor()
-    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s and t.folio_ticket = %s',(user_id, nuevo_folio))
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s and t.folio_ticket = %s',(user_id, nuevo_folio))
     consBU = cursorBU.fetchall()
     if not consBU:
         flash('No se realizó ninguna orden, por favor ordene algun producto.')
@@ -196,10 +196,10 @@ def buscar():
         
         cursorBU = mysql.connection.cursor()
         if not VBusc:
-            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID')
+            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID group by t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad')
 
         else:
-            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID WHERE folio_ticket = %s', (VBusc,))
+            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID WHERE folio_ticket = %s group by t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad', (VBusc,))
         consBP = cursorBU.fetchall()
         
         if consBP is not None:
@@ -208,7 +208,7 @@ def buscar():
             mensaje = 'No se encontraron resultados.'
             return render_template('buscar_pedido.html', mensaje=mensaje)
     cursorBU = mysql.connection.cursor()
-    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID')
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID group by t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad')
     consBU = cursorBU.fetchall()
     return render_template('buscar_pedido.html', listaPedido=consBU)
 
@@ -552,10 +552,10 @@ def buscarp():
         user_id = session.get('Matricula')
         cursorBU = mysql.connection.cursor()
         if not VBusc:
-            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s',(user_id,))
+            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s group by t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad',(user_id,))
 
         else:
-            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID WHERE t.id_cliente = %s AND folio_ticket = %s', (user_id,VBusc, ))
+            cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID WHERE t.id_cliente = %s AND folio_ticket = %s group by t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad', (user_id,VBusc, ))
         consBP = cursorBU.fetchall()
         
         if consBP is not None:
@@ -565,7 +565,7 @@ def buscarp():
             return render_template('bmis_pedidos.html', mensaje=mensaje)
     user_id = session.get('Matricula')
     cursorBU = mysql.connection.cursor()
-    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s',(user_id,))
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s group by t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad',(user_id,))
     consBU = cursorBU.fetchall()
     return render_template('mis_pedidos.html', listaPedido=consBU)
 
