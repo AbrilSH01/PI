@@ -1,0 +1,80 @@
+drop database if exists cafeteriaapp;
+create database cafeteriaapp;
+
+use cafeteriaapp;
+
+create table usuario (
+    Matricula int not null primary key,
+    Nombre varchar(50),
+    Apellidos varchar(50),
+    Correo varchar(50),
+    Contraseña varchar(50),
+    Rol int(11),
+    UNIQUE KEY (Correo),
+    UNIQUE Key (Matricula)
+);
+
+
+create table tarjetas (
+ID int not null primary key auto_increment,
+numero bigint  (16),
+nombre varchar (50),
+vencimiento varchar (7),
+CVV int(3),
+cliente int (8),
+foreign key (cliente) references usuario(Matricula)
+);
+
+create table Menu (
+ID int not null primary key auto_increment,
+Producto varchar (50),
+precio decimal(10, 2)
+);
+
+create table orden(
+ID int primary key auto_increment,
+x int
+);
+select * from orden;
+create table ticket (
+ID int not null primary key auto_increment,
+folio_ticket int(11),
+id_cliente int(11),
+id_producto int(11),
+cantidad int(11),
+total decimal (10,2),
+foreign key (id_cliente) references usuario(Matricula),
+foreign key (id_producto) references menu(ID)
+);
+
+insert into Menu (Producto,precio) values 
+('Latte',25.00), ('Pay',25.00), ('Cheesecake',25.00), ('Matcha',30.00), ('Espresso',30.00), 
+('Hot Dog',30.00), ('Frappe',50.00), ('Hamburguesa',50.00), ('Sandwich',50.00), ('Pizza',120.00);
+
+-- Insertar datos en la tabla "usuario"
+INSERT INTO usuario (Matricula, Nombre, Apellidos, Correo, Contraseña, Rol) VALUES
+(12345678, 'Juan', 'Pérez', 'juan@example.com', '123456', 2),
+(23456789, 'María', 'Gómez', 'maria@example.com', 'password', 2),
+(34567890, 'Carlos', 'López', 'carlos@example.com', 'qwerty', 2),
+(45678901, 'Ana', 'Rodríguez', 'ana@example.com', 'abc123', 2),
+(56789012, 'Pedro', 'Martínez', 'pedro@example.com', 'letmein', 2),
+(121038827, 'Pablo', 'Ramírez', '121038827@upq.edu.mx','1234', 1);
+
+-- Insertar datos en la tabla "tarjetas"
+INSERT INTO tarjetas (numero, nombre, vencimiento, CVV, cliente) VALUES
+(1234567812345678, 'Juan Pérez', '07/25', 123, 12345678),
+(9876543210987654, 'María Gómez', '12/24', 456, 23456789),
+(5678901234567890, 'Carlos López', '05/23', 789, 34567890),
+(4321098765432109, 'Ana Rodríguez', '11/22', 321, 45678901),
+(6789012345678901, 'Pedro Martínez', '09/26', 654, 56789012);
+
+-- Insertar datos en la tabla "ticket"
+INSERT INTO ticket (folio_ticket, id_cliente, id_producto, cantidad, total) VALUES
+(1, 12345678, 1, 2, 50.00),
+(2, 23456789, 3, 1, 8.99),
+(3, 34567890, 2, 3, 47.97),
+(4, 45678901, 5, 2, 19.98),
+(5, 56789012, 4, 1, 12.99);
+
+insert into orden (x) values
+(1),(1),(1),(1),(1),(1);
