@@ -164,7 +164,7 @@ def orden():
     # Renderizar la plantilla HTML y pasar la lista de productos y el nuevo folio
     user_id = session.get('Matricula')
     cursorBU = mysql.connection.cursor()
-    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s and t.folio_ticket = %s',(user_id, nuevo_folio))
+    cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, sum(t.cantidad *  m.precio) FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s and t.folio_ticket = %s group by t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad',(user_id, nuevo_folio))
     consBU = cursorBU.fetchall()
     if not consBU:
         flash('No se realizó ninguna orden, por favor ordene algun producto.')
