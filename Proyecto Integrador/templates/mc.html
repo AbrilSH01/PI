@@ -7,16 +7,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleBuscar.css') }}">
 </head>
 <body>
-    {%with mensajes= get_flashed_messages()%}
-        {% if mensajes%}
-            {%for msj in mensajes%}
-                <h3> {{ msj }} </h3>
-            {%endfor%}
-        {% endif %}
-    {%endwith%}
     <div class="form-main">
     <form action="{{ url_for('mc')}}" method="POST">
-        
+        <center><h1>Mi cuenta</h1></center>
         <table>
             <table>
                 <thead>
@@ -25,7 +18,7 @@
                         <th>Nombre</th>
                         <th>Apellidos</th>
                         <th>Correo</th>
-                        <th>Rol</th>
+                       
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -37,15 +30,8 @@
                         <td> {{ alb.1 }} </td>
                         <td> {{ alb.2 }} </td>
                         <td> {{ alb.3 }} </td>
-                        {%if alb.5 == 2 %}
-                        <td> Usuario </td>
-                        {% else %}
-                        <td> Administrador </td>
-                        {% endif %}
-                   
                         <td> 
                             <a href=/visualizarActc/{{alb.0}}  class="btn" >Actualizar</a>
-                            <a href=/metodo/{{alb.0}}  class="btn" >Metodo de pago</a>
                             <a href=/confirmacionc/{{alb.0}} class="btnD">Eliminar</button>
                         </td>
                     </tr>
@@ -63,6 +49,6 @@
     </form>
     
     </div>
-    <a href="/main" class="btn">Regresar al menú principal</a>
+    <a href="/cliente" class="btn">Regresar al menú principal</a>
 </body>
 </html>

@@ -100,6 +100,7 @@ def main():
 def cliente():
     return render_template('mm_cl.html')
 
+
 @app.route('/menu', methods=['GET', 'POST'])
 @login_required
 def menu():
@@ -113,8 +114,9 @@ def menu():
     cursorBU = mysql.connection.cursor()
     cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s and t.folio_ticket = %s',(user_id, ultimo_folio))
     consBU = cursorBU.fetchall()
-    flash("Su orden es la numero " + str(ultimo_folio)) 
+    flash("Su orden es la numero " + str(ultimo_folio) + ", Favor de pagar en caja") 
     return render_template('menu.html', productos=productos, listaPedido=consBU)
+
 
 
 
@@ -164,11 +166,17 @@ def orden():
     cursorBU = mysql.connection.cursor()
     cursorBU.execute('SELECT t.ID, t.folio_ticket, t.id_cliente, m.Producto, t.cantidad, t.total FROM ticket t INNER JOIN Menu m ON t.id_producto = m.ID where t.id_cliente = %s and t.folio_ticket = %s',(user_id, nuevo_folio))
     consBU = cursorBU.fetchall()
-    CS = mysql.connection.cursor()
-    CS.execute('INSERT INTO orden (x) VALUES (1)')
-    mysql.connection.commit()
-    return render_template('orden.html', productos=productos, listaPedido=consBU, nuevo_folio=nuevo_folio)
-   
+    if not consBU:
+        flash('No se realizó ninguna orden, por favor ordene algun producto.')
+        return redirect(url_for('menu'))
+    else:
+        CS = mysql.connection.cursor()
+        CS.execute('INSERT INTO orden (x) VALUES (1)')
+        mysql.connection.commit()
+        
+    
+        return render_template('orden.html', productos=productos, listaPedido=consBU, nuevo_folio=nuevo_folio)
+    
 
 def obtener_ultimo_folio():
     cursor = mysql.connection.cursor()
